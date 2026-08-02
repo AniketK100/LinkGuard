@@ -2,34 +2,74 @@ version: '3.8'
 
 services:
   postgres:
-    image: postgres:16-alpine
-    container_name: urlintel-postgres
+    image: postgres:alpine
+    container_name: linkguard-postgres
+    restart: always
     environment:
-      POSTGRES_DB: ${DB_NAME:-urlintel}
-      POSTGRES_USER: ${DB_USER:-postgres}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-linkguard}
+      POSTGRES_USER: ${DB_USER:-linkguard_user}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-linkguard_secret}
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres} -d ${DB_NAME:-urlintel}"]
-      interval: 5s
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-linkguard_user} -d ${DB_NAME:-linkguard}"]
+      interval: 10s
       timeout: 5s
       retries: 5
 
   redis:
-    image: redis:7-alpine
-    container_name: urlintel-redis
+    image: redis:alpine
+    container_name: linkguard-redis
+    restart: always
     ports:
       - "6379:6379"
     volumes:
       - redis_data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
+      interval: 10s
       timeout: 5s
       retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/Dockerfile.backend
+    container_name: linkguard-backend
+    restart: always
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: ${PORT:-8080}
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-linkguard}
+      DB_USER: ${DB_USER:-linkguard_user}
+      DB_PASSWORD: ${DB_PASSWORD:-linkguard_secret}
+      REDIS_HOST: ${REDIS_HOST:-redis}
+      REDIS_PORT: 6379
+      JWT_SECRET: ${JWT_SECRET:-secretkeymustbeatleast256bitslongforhs256algorithm}
+      JWT_ACCESS_EXPIRY: ${JWT_ACCESS_EXPIRY:-900}
+      JWT_REFRESH_EXPIRY: ${JWT_REFRESH_EXPIRY:-604800}
+      IP_HASH_SALT: ${IP_HASH_SALT:-linkguard_ip_anonymization_salt}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/Dockerfile.frontend
+    container_name: linkguard-frontend
+    restart: always
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
 
 volumes:
   postgres_data:

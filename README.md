@@ -1,130 +1,79 @@
-# LinkGuard — URL Intelligence Platform
+# LinkGuard — Intelligent URL Management & Analytics Platform
 
-> A production-grade, stateful URL management and security platform built with **Java 21**, **Spring Boot 3**, **PostgreSQL**, **Redis**, and **Docker**.
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Architecture: Modular Monolith](https://img.shields.io/badge/Architecture-Modular%20Monolith-orange.svg)](#architecture)
 
----
-
-## 📌 Overview
-
-**LinkGuard** is not just another CRUD URL shortener. It treats every short link as an intelligent, stateful asset with a defined lifecycle, security posture, and real-time analytics profile.
-
-### Highlights
-- 🛡️ **Security Controls**: Password-protected links, expiry dates, domain blacklisting, rate limiting, and brute-force mitigation.
-- ⚡ **Low-Latency Redirect Hot Path**: 302 Found redirects backed by Redis cache-aside design and fallback mechanics.
-- 📊 **Real-Time Analytics Ingestion**: Asynchronous click event processing (`@Async`), user-agent parsing, and SHA-256 IP anonymization.
-- 🏗️ **Clean Architecture**: Modular monolith pattern using package-by-feature organization (`auth`, `url`, `redirect`, `analytics`, `security`, `qr`, `admin`, `cache`, `common`).
+**LinkGuard** is an intelligent URL management and analytics platform engineered with a high-performance **Modular Monolith** architecture in Java and Spring Boot, coupled with a modern React SPA dashboard.
 
 ---
 
-## 🛠️ Technology Stack
+## 🌟 Key Capabilities
 
-| Layer | Stack |
-|---|---|
-| **Language & Core** | Java 21, Spring Boot 3.2.3 |
-| **Security & Auth** | Spring Security, JWT (Stateless), BCrypt |
-| **Data & Persistence** | PostgreSQL 16, Spring Data JPA, Hibernate |
-| **Caching & Rate Limiting** | Redis 7 |
-| **Database Migrations** | Flyway |
-| **DTO Mapping** | MapStruct, Lombok |
-| **API Documentation** | OpenAPI / Swagger (`springdoc-openapi`) |
-| **Containerization** | Docker, Docker Compose |
+- **URL Shortening & Custom Aliases**: Base62 short code generation with automatic collision retries and reserved-word filtering.
+- **High-Performance Redirect Engine**: Sub-100ms p95 redirect latency backed by Redis cache-aside reads.
+- **Asynchronous Click Analytics**: Non-blocking `@Async` click event recording with IP anonymization (SHA-256 + salt), User-Agent parsing, and geo-location classification.
+- **Advanced Link Security**: Expiring links, bcrypt password-protected links, domain blacklist checks, and Redis rate limiting.
+- **Rich Analytics Dashboard**: Real-time traffic breakdown by browser, OS, device, country, and time-series charts.
+- **QR Code Generation**: PNG stream generation for every short link.
 
 ---
 
-## 📂 Repository Structure
+## 🏗️ Architecture & Technology Stack
 
 ```
-LinkGuard/
-├── docs/                                  # Architectural & Product Specifications
-│   ├── 01_PRD.md                          # Product Requirements Document
-│   ├── 02_TRD.md                          # Technical Requirements Document
-│   ├── 03_App_Flow.md                     # Detailed Application Flows & Sequence Diagrams
-│   ├── 04_UIUX_Design_Brief.md            # UI/UX Specifications & ASCII Wireframes
-│   ├── 05_Backend_Schema_Data_Auth.md     # Database Schema, Contracts & Error Shapes
-│   └── 06_Implementation_Plan_Build_Order.md # 14-Day Roadmap & Implementation Phases
-├── src/
-│   ├── main/
-│   │   ├── java/com/app/urlintel/
-│   │   │   ├── auth/                      # Authentication domain
-│   │   │   ├── url/                       # URL management domain
-│   │   │   ├── redirect/                  # High-performance redirect engine
-│   │   │   ├── analytics/                 # Asynchronous analytics capture & aggregation
-│   │   │   ├── security/                  # Rate limiting & domain blacklist
-│   │   │   ├── qr/                        # QR code generator service
-│   │   │   ├── admin/                     # Moderation & admin management
-│   │   │   ├── cache/                     # Redis cache-aside wrappers
-│   │   │   ├── common/                    # Shared config, exceptions, utilities
-│   │   │   └── UrlIntelApplication.java   # Spring Boot Application Entry Point
-│   │   └── resources/
-│   │       ├── application.yml            # System configuration
-│   │       └── db/migration/              # Versioned Flyway SQL migrations
-│   │           └── V1__init_schema.sql
-├── docker-compose.yml                     # PostgreSQL + Redis setup
-├── .env.example                           # Environment configuration template
-├── .gitignore                             # Git ignore rules
-└── pom.xml                                # Maven build specification
+LinkGuard Monolith
+├── backend/       # Spring Boot Application (Java LTS, Spring Security, Spring Data JPA, Redis, Flyway)
+├── frontend/      # React SPA (Vite, Tailwind CSS, Axios, React Router, TanStack Query)
+├── docker/        # Multi-stage Dockerfiles
+├── docs/          # Product & Technical Specifications
+└── .github/       # Automated CI Workflows
 ```
+
+### Stack Overview
+- **Backend**: Java (Latest LTS), Spring Boot (Latest Stable), Spring Security (JWT), Spring Data JPA, PostgreSQL, Redis, Flyway, Maven
+- **Frontend**: React (Latest Stable), Vite, Tailwind CSS, Axios, React Router, TanStack Query
+- **Docs & Testing**: OpenAPI / Swagger (`springdoc-openapi`), JUnit 5, Mockito
+- **DevOps**: Docker, Docker Compose, GitHub Actions
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Quick Start (Local Development)
 
 ### Prerequisites
-- **JDK 21** or later
-- **Maven 3.8+**
-- **Docker & Docker Compose**
+- Docker & Docker Compose
+- Java JDK (Latest LTS) & Maven (optional for containerized setup)
+- Node.js (Latest LTS) & npm (optional for containerized setup)
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Sahil-Ghorpade/LinkGuard.git
-cd LinkGuard
-```
-
-### 2. Configure Environment Variables
-Copy `.env.example` to `.env`:
+### 1. Environment Setup
+Copy the environment template:
 ```bash
 cp .env.example .env
 ```
 
-### 3. Start Infrastructure Services
-Launch PostgreSQL 16 and Redis 7 in detached mode:
+### 2. Start Services with Docker Compose
 ```bash
-docker-compose up -d
+docker-compose up --build
 ```
 
-### 4. Build and Run the Application
-```bash
-mvn clean compile
-mvn spring-boot:run
-```
-
-The application will start on `http://localhost:8080`.
+Access the applications:
+- **Frontend Dashboard**: `http://localhost:3000`
+- **Backend REST API**: `http://localhost:8080`
+- **Swagger OpenAPI Documentation**: `http://localhost:8080/swagger-ui.html`
 
 ---
 
-## 📊 Verification & Health Checks
+## 📚 Project Documentation
 
-- **Actuator Health Check**:
-  ```bash
-  curl -i http://localhost:8080/actuator/health
-  ```
-  Expected response: `HTTP/1.1 200 OK` `{"status":"UP"}`
+The repository contains comprehensive technical documentation in the [`docs/`](./docs) directory:
 
-- **OpenAPI / Swagger UI**:
-  Access interactive API documentation at:
-  `http://localhost:8080/swagger-ui.html`
-
----
-
-## 🧪 Testing
-
-Run unit and integration tests:
-```bash
-mvn clean test
-```
+1. [Product Requirements Document (PRD)](./docs/01_PRD.md)
+2. [Technical Requirements Document (TRD)](./docs/02_TRD.md)
+3. [Application Flow & Sequence Diagrams](./docs/03_App_Flow.md)
+4. [UI/UX Design Brief & Wireframes](./docs/04_UIUX_Design_Brief.md)
+5. [Backend Schema, Data Model & Auth Contracts](./docs/05_Backend_Schema_Data_Auth.md)
+6. [Implementation Plan & Engineering Roadmap](./docs/06_Implementation_Plan_Build_Order.md)
 
 ---
 
-## 🛡️ License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+## 📄 License
+This project is licensed under the MIT License.
