@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link2 } from 'lucide-react';
+import Badge from '../../components/common/Badge';
 import api from '../../lib/axios';
 
 export function AdminUrlsPage() {
@@ -8,45 +8,41 @@ export function AdminUrlsPage() {
 
   useEffect(() => {
     api.get('/api/v1/admin/urls').then((res) => {
-      if (res.data?.success) {
-        setUrls(res.data.data.content || []);
-      }
+      if (res.data?.success) setUrls(res.data.data.content || []);
     }).finally(() => setLoading(false));
   }, []);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">Global URL Moderation</h1>
-        <p className="text-xs text-slate-400">System-wide inspection of all short URLs across all platform users.</p>
+        <h1 className="text-lg font-bold text-text-primary">Global Link Moderation</h1>
+        <p className="text-xs text-text-tertiary mt-0.5">System-wide inspection of all short links across all platform users.</p>
       </div>
 
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      <div className="bg-surface border border-hairline rounded-xl overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-slate-500 text-xs">Loading global links...</div>
+          <div className="p-8 text-center text-xs text-text-tertiary">Loading global URLs…</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-950/50 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-surface-2 text-text-tertiary uppercase tracking-wider text-[9px] font-semibold border-b border-hairline">
                 <tr>
-                  <th className="px-6 py-3 font-semibold">Short Link</th>
-                  <th className="px-6 py-3 font-semibold">User ID</th>
-                  <th className="px-6 py-3 font-semibold">Original Destination</th>
-                  <th className="px-6 py-3 font-semibold">Clicks</th>
-                  <th className="px-6 py-3 font-semibold">Status</th>
+                  <th className="px-4 py-2.5">Short Slug</th>
+                  <th className="px-4 py-2.5">Owner ID</th>
+                  <th className="px-4 py-2.5">Destination</th>
+                  <th className="px-4 py-2.5">Clicks</th>
+                  <th className="px-4 py-2.5">Status</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-hairline">
                 {urls.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 font-mono font-medium text-emerald-400">/{u.shortCode}</td>
-                    <td className="px-6 py-4 font-mono text-slate-400">#{u.userId || 'Anon'}</td>
-                    <td className="px-6 py-4 max-w-xs truncate text-slate-300">{u.originalUrl}</td>
-                    <td className="px-6 py-4 font-semibold text-white">{u.clickCount}</td>
-                    <td className="px-6 py-4">
-                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                        {u.status}
-                      </span>
+                  <tr key={u.id} className="hover:bg-surface-2/50 transition-colors duration-100">
+                    <td className="px-4 py-3 font-mono font-semibold text-accent text-[11px]">/{u.shortCode}</td>
+                    <td className="px-4 py-3 font-mono text-text-tertiary">#{u.userId || 'Anon'}</td>
+                    <td className="px-4 py-3 max-w-xs truncate text-text-secondary text-[11px]">{u.originalUrl}</td>
+                    <td className="px-4 py-3 font-mono font-bold text-text-primary">{u.clickCount}</td>
+                    <td className="px-4 py-3">
+                      <Badge variant={u.status === 'ACTIVE' ? 'active' : 'disabled'}>{u.status}</Badge>
                     </td>
                   </tr>
                 ))}

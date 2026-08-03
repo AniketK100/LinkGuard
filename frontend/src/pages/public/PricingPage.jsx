@@ -1,50 +1,71 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Check } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import Button from '../../components/common/Button';
+
+const plans = [
+  { name: 'Starter', price: '0', desc: 'For individuals starting out.', features: ['50 short links', 'Basic click analytics', 'Custom QR codes', 'Community support'] },
+  { name: 'Pro', price: '19', desc: 'For creators and growing teams.', popular: true, features: ['Unlimited short links', 'Custom aliases', 'Password protection', 'Full click analytics', 'High-res QR export', 'Priority support'] },
+  { name: 'Enterprise', price: '99', desc: 'For large teams and organizations.', features: ['Custom domains', 'Team login & roles', '99.9% uptime guarantee', 'Security & audit logs', '24/7 dedicated support'] },
+];
 
 export function PricingPage() {
-  const plans = [
-    { name: 'Starter', price: '$0', desc: 'Free forever for personal links', features: ['Up to 50 Short Links', 'Basic Click Analytics', 'Standard QR Codes', 'Community Support'] },
-    { name: 'Pro', price: '$19', desc: 'Ideal for creators and growing teams', popular: true, features: ['Unlimited Short Links', 'Custom Aliases', 'Password Protection', 'Real-Time Analytics', 'High-Res QR Code Export', 'Priority Support'] },
-    { name: 'Enterprise', price: '$99', desc: 'Dedicated infrastructure & SLAs', features: ['Custom Domain Integration', 'SSO & SAML Auth', 'Dedicated Redis Cluster', '99.99% SLA Uptime', 'Audit Log Retention', '24/7 Dedicated Support'] },
-  ];
+  const [annual, setAnnual] = useState(false);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-      <div className="text-center max-w-2xl mx-auto space-y-4">
-        <h1 className="text-4xl font-extrabold text-white tracking-tight">Flexible Pricing Plans</h1>
-        <p className="text-slate-400 text-base">Simple, transparent pricing for individuals and businesses of any scale.</p>
+    <div className="max-w-5xl mx-auto px-4 py-20 space-y-10">
+      <div className="text-center space-y-3">
+        <h1 className="text-4xl font-bold text-text-primary tracking-tight">Simple Pricing</h1>
+        <p className="text-text-secondary text-sm">Transparent pricing. No per-click fees or hidden costs.</p>
+
+        {/* Toggle */}
+        <div className="flex items-center justify-center gap-3 text-sm">
+          <span className={`font-medium ${!annual ? 'text-text-primary' : 'text-text-tertiary'}`}>Monthly</span>
+          <button
+            onClick={() => setAnnual(!annual)}
+            className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${annual ? 'bg-accent' : 'bg-hairline'}`}
+          >
+            <div className={`absolute top-0.5 w-4 h-4 bg-canvas rounded-full transition-transform duration-200 ease-out-expo ${annual ? 'translate-x-5' : 'translate-x-0.5'}`} />
+          </button>
+          <span className={`font-medium ${annual ? 'text-text-primary' : 'text-text-tertiary'}`}>Annual <span className="text-accent text-xs font-mono">−20%</span></span>
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {plans.map((plan, idx) => (
-          <div key={idx} className={`bg-slate-900/80 border p-8 rounded-2xl flex flex-col justify-between relative ${plan.popular ? 'border-emerald-500 shadow-xl shadow-emerald-500/10' : 'border-slate-800'}`}>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {plans.map((plan) => (
+          <div key={plan.name} className={`bg-surface border rounded-xl p-6 flex flex-col justify-between relative ${plan.popular ? 'border-accent/30 ring-1 ring-accent/10' : 'border-hairline'}`}>
             {plan.popular && (
-              <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-1 bg-emerald-500 text-slate-950 text-xs font-bold rounded-full uppercase tracking-wider">
-                Most Popular
+              <span className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-2.5 py-0.5 bg-accent text-canvas text-[10px] font-mono font-bold rounded-full uppercase tracking-wider">
+                Popular
               </span>
             )}
-            <div className="space-y-6">
+            <div className="space-y-4">
               <div>
-                <h3 className="text-xl font-bold text-white">{plan.name}</h3>
-                <p className="text-xs text-slate-400 mt-1">{plan.desc}</p>
+                <h3 className="text-base font-bold text-text-primary">{plan.name}</h3>
+                <p className="text-xs text-text-tertiary mt-0.5">{plan.desc}</p>
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-4xl font-extrabold text-white">{plan.price}</span>
-                <span className="text-slate-400 text-sm">/month</span>
+                <span className="text-4xl font-mono font-extrabold text-text-primary tracking-tight">
+                  ${annual ? Math.round(Number(plan.price) * 0.8) : plan.price}
+                </span>
+                <span className="text-text-tertiary text-xs">/mo</span>
               </div>
-              <ul className="space-y-3 text-xs text-slate-300">
-                {plan.features.map((feat, fIdx) => (
-                  <li key={fIdx} className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+              <ul className="space-y-2 text-[13px] text-text-secondary">
+                {plan.features.map((feat) => (
+                  <li key={feat} className="flex items-start gap-2">
+                    <Check className="w-3.5 h-3.5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2.5} />
                     <span>{feat}</span>
                   </li>
                 ))}
               </ul>
             </div>
-            <Link to="/register" className={`mt-8 w-full py-3 rounded-xl text-center text-sm font-semibold transition-all ${plan.popular ? 'bg-gradient-to-r from-emerald-500 to-cyan-500 text-slate-950 hover:from-emerald-400 hover:to-cyan-400' : 'bg-slate-800 hover:bg-slate-700 text-white border border-slate-700'}`}>
-              Get Started
-            </Link>
+            <div className="pt-6">
+              <Link to="/register" className="block">
+                <Button variant={plan.popular ? 'primary' : 'secondary'} className="w-full justify-center">
+                  Get Started
+                </Button>
+              </Link>
+            </div>
           </div>
         ))}
       </div>

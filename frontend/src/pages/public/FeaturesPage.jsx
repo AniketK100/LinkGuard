@@ -1,35 +1,39 @@
 import React from 'react';
-import { Shield, Zap, BarChart3, QrCode, Lock, Globe, Cpu, RefreshCw } from 'lucide-react';
+import { Globe, QrCode, Lock, RefreshCw, Shield, Cpu, BarChart3, Zap } from 'lucide-react';
+
+const features = [
+  { title: 'Custom Short Links', desc: 'Create custom slugs and branded short links that are easy to remember and share.', icon: Globe },
+  { title: 'QR Code Studio', desc: 'Create and download custom QR codes in PNG or SVG formats with your choice of colors.', icon: QrCode },
+  { title: 'Password Protection', desc: 'Secure any destination link with a password so only authorized visitors can open it.', icon: Lock },
+  { title: 'Link Expiration', desc: 'Set links to automatically expire or deactivate after a specific date or time.', icon: RefreshCw },
+  { title: 'Privacy Protection', desc: 'All visitor IP addresses are fully anonymized. We never store or log personal data.', icon: Shield },
+  { title: 'Instant Speed', desc: 'High-speed redirection engine ensuring sub-100ms load times for all visitors.', icon: Cpu },
+  { title: 'Click Analytics', desc: 'View detailed insights by country, device, browser, and referring websites.', icon: BarChart3 },
+  { title: 'Spam Protection', desc: 'Automatic rate limiting prevents spam attacks and keeps your links safe.', icon: Zap },
+];
 
 export function FeaturesPage() {
-  const features = [
-    { title: 'Custom Aliases', desc: 'Create brandable short codes that match your business name.', icon: Globe },
-    { title: 'Dynamic QR Codes', desc: 'Generate customized PNG and SVG QR codes with logo embedding.', icon: QrCode },
-    { title: 'Password Protection', desc: 'Secure sensitive destinations with bcrypt-hashed passwords.', icon: Lock },
-    { title: 'Expiration Control', desc: 'Automatically disable links after a specific time or click count.', icon: RefreshCw },
-    { title: 'Privacy Telemetry', desc: 'SHA-256 IP anonymization ensures full GDPR & privacy compliance.', icon: Shield },
-    { title: 'Sub-millisecond Latency', desc: 'Redis cache-aside engine ensures maximum redirection throughput.', icon: Cpu },
-  ];
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
-      <div className="text-center max-w-3xl mx-auto space-y-4">
-        <h1 className="text-4xl font-extrabold text-white tracking-tight">Enterprise Features</h1>
-        <p className="text-slate-400 text-base">
-          Discover all capabilities built directly into LinkGuard to streamline your link management workflow.
+    <div className="max-w-5xl mx-auto px-4 py-20 space-y-12">
+      <div className="text-center max-w-2xl mx-auto space-y-3">
+        <h1 className="text-4xl font-bold text-text-primary tracking-tight">Platform Features</h1>
+        <p className="text-text-secondary text-sm leading-relaxed">
+          Everything you need to create, track, and protect your links.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {features.map((feat, idx) => {
           const Icon = feat.icon;
           return (
-            <div key={idx} className="bg-slate-900/80 border border-slate-800 p-6 rounded-2xl space-y-3">
-              <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl w-fit">
-                <Icon className="w-5 h-5" />
+            <div key={idx} className="bg-surface border border-hairline rounded-xl p-5 space-y-3 group hover:border-accent/20 transition-colors duration-200">
+              <div className="flex items-center gap-3">
+                <div className="p-2 rounded-lg bg-accent/5 border border-accent/10 text-accent">
+                  <Icon className="w-4 h-4" strokeWidth={1.75} />
+                </div>
+                <h3 className="text-sm font-bold text-text-primary">{feat.title}</h3>
               </div>
-              <h3 className="text-lg font-semibold text-white">{feat.title}</h3>
-              <p className="text-sm text-slate-400 leading-relaxed">{feat.desc}</p>
+              <p className="text-[13px] text-text-secondary leading-relaxed">{feat.desc}</p>
             </div>
           );
         })}

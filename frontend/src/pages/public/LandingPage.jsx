@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Zap, Lock, BarChart3, QrCode, ArrowRight, Copy, Check, Sparkles } from 'lucide-react';
+import { ArrowRight, Copy, Check, Zap, BarChart3, Lock, QrCode, Shield } from 'lucide-react';
+import Button from '../../components/common/Button';
 import api from '../../lib/axios';
 
 export function LandingPage() {
@@ -9,6 +10,16 @@ export function LandingPage() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const statsRef = useRef(null);
+  const [statsVisible, setStatsVisible] = useState(false);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) setStatsVisible(true);
+    }, { threshold: 0.3 });
+    if (statsRef.current) observer.observe(statsRef.current);
+    return () => observer.disconnect();
+  }, []);
 
   const handleShorten = async (e) => {
     e.preventDefault();
@@ -18,11 +29,10 @@ export function LandingPage() {
     try {
       const response = await api.post('/api/v1/urls', { originalUrl: url });
       if (response.data?.success) {
-        const fullShort = window.location.origin + '/' + response.data.data.shortCode;
-        setShortUrl(fullShort);
+        setShortUrl(window.location.origin + '/' + response.data.data.shortCode);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to shorten URL. Check format.');
+      setError(err.response?.data?.message || 'Failed to shorten URL.');
     } finally {
       setLoading(false);
     }
@@ -34,103 +44,157 @@ export function LandingPage() {
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const stats = [
+    { label: 'Redirect Speed', value: '<100ms' },
+    { label: 'Privacy', value: '100% Secure' },
+    { label: 'Custom Slugs', value: 'Instant' },
+    { label: 'Analytics', value: 'Real-Time' },
+  ];
+
   return (
-    <div className="space-y-24 py-12">
-      {/* Hero Section */}
-      <section className="relative text-center max-w-4xl mx-auto px-4 space-y-8">
-        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-semibold tracking-wide">
-          <Sparkles className="w-3.5 h-3.5" />
-          <span>Next-Generation URL Management Platform</span>
-        </div>
+    <div className="noise-overlay">
+      {/* First Screen Fold (Viewport height: Navbar + Centered Hero + Bottom Stats Bar) */}
+      <div className="min-h-[calc(100vh-5rem)] flex flex-col justify-between">
+        {/* Centered Hero Section */}
+        <section className="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto px-4 py-8 text-center space-y-8 w-full">
+          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.08]">
+            Control room for<br />
+            <span className="text-text-primary underline decoration-2 underline-offset-8">your links</span>
+          </h1>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-tight">
-          Intelligent Short Links with{' '}
-          <span className="bg-gradient-to-r from-emerald-400 via-cyan-400 to-indigo-400 bg-clip-text text-transparent">
-            Enterprise Security
-          </span>
-        </h1>
+          <p className="text-base sm:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
+            Fast, reliable URL shortening with real-time analytics, privacy protection, and customizable QR codes.
+          </p>
 
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">
-          Shorten, track, secure, and analyze your URLs in real time. Powered by high-speed Redis caching, privacy-compliant telemetry, and custom QR codes.
-        </p>
+          {/* Live shortener - Pill Input Form */}
+          <div className="bg-surface border border-hairline p-3 sm:p-4 rounded-full max-w-2xl w-full mx-auto text-left relative z-10 shadow-md">
+            <form onSubmit={handleShorten} className="flex items-center gap-3">
+              <input
+                type="url"
+                placeholder="Paste a long URL to shorten…"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                required
+                className="flex-1 px-5 py-3 bg-transparent border-0 text-text-primary placeholder-text-tertiary focus:outline-none text-sm sm:text-base font-mono"
+              />
+              <Button type="submit" disabled={loading} icon={ArrowRight} size="lg" className="rounded-full flex-shrink-0">
+                {loading ? 'Shortening…' : 'Shorten'}
+              </Button>
+            </form>
 
-        {/* Shortener Box */}
-        <div className="bg-slate-900/80 backdrop-blur-xl border border-slate-800 p-4 sm:p-6 rounded-2xl shadow-2xl max-w-2xl mx-auto space-y-4">
-          <form onSubmit={handleShorten} className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="url"
-              placeholder="Paste your long link here (e.g. https://example.com/very-long-path)"
-              value={url}
-              onChange={(e) => setUrl(e.target.value)}
-              required
-              className="flex-1 px-4 py-3 bg-slate-950 border border-slate-800 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 text-sm transition-all"
-            />
-            <button
-              type="submit"
-              disabled={loading}
-              className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-cyan-500 hover:from-emerald-400 hover:to-cyan-400 text-slate-950 font-semibold rounded-xl text-sm transition-all shadow-lg shadow-emerald-500/20 flex items-center justify-center gap-2 whitespace-nowrap"
-            >
-              {loading ? 'Shortening...' : 'Shorten URL'}
-              <ArrowRight className="w-4 h-4" />
-            </button>
-          </form>
-
-          {error && <p className="text-xs text-rose-400 font-medium text-left px-1">{error}</p>}
+            {error && <p className="text-xs text-red-500 font-medium px-6 pt-2">{error}</p>}
+          </div>
 
           {shortUrl && (
-            <div className="flex items-center justify-between p-3.5 bg-slate-950 border border-emerald-500/30 rounded-xl text-sm animate-fade-in">
-              <span className="font-mono text-emerald-400 font-medium truncate">{shortUrl}</span>
-              <button
-                onClick={copyToClipboard}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold rounded-lg border border-emerald-500/30 transition-colors"
-              >
-                {copied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
-                <span>{copied ? 'Copied!' : 'Copy'}</span>
+            <div className="max-w-2xl w-full mx-auto flex items-center justify-between p-4 bg-surface border border-hairline rounded-2xl animate-fade-in shadow-md">
+              <span className="font-mono text-sm sm:text-base text-text-primary font-bold truncate px-2">{shortUrl}</span>
+              <button onClick={copyToClipboard} className="flex items-center gap-2 px-5 py-2.5 bg-black text-white dark:bg-white dark:text-black text-xs font-extrabold uppercase rounded-full hover:opacity-90 transition-opacity">
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                <span>{copied ? 'Copied' : 'Copy'}</span>
               </button>
             </div>
           )}
-        </div>
-      </section>
+        </section>
 
-      {/* Feature Grid */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+        {/* Stats Counter Bar at Bottom of First Fold */}
+        <section ref={statsRef} className="border-y border-hairline bg-surface py-8 shadow-sm w-full">
+          <div className="max-w-5xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+            {stats.map((s, i) => (
+              <div key={i} className={`space-y-1 transition-all duration-500 ease-out-expo ${statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`} style={{ transitionDelay: `${i * 80}ms` }}>
+                <div className="text-2xl sm:text-3xl font-mono font-bold text-text-primary tracking-tight">{s.value}</div>
+                <div className="text-[11px] sm:text-xs text-text-tertiary uppercase tracking-widest font-bold">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </div>
+
+      {/* Below the Fold Content (Appears on Scroll) */}
+      <section className="max-w-5xl mx-auto px-4 py-20 lg:py-28 space-y-12">
         <div className="text-center space-y-3">
-          <h2 className="text-3xl font-bold tracking-tight text-white">Built for Modern Teams</h2>
-          <p className="text-slate-400 text-sm max-w-xl mx-auto">
-            Everything you need to create, manage, and safeguard high-volume links.
+          <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-text-primary">
+            Everything you need for link management
+          </h2>
+          <p className="text-text-secondary text-base sm:text-lg max-w-lg mx-auto">
+            Built for speed, privacy, and ease of use.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-slate-700 transition-colors">
-            <div className="p-3 bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 rounded-xl w-fit">
-              <Zap className="w-6 h-6" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Tile 1 */}
+          <div className="md:col-span-2 bg-surface border border-hairline rounded-2xl p-8 space-y-4 shadow-md">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-xl bg-surface-2 border border-hairline text-text-primary">
+                <BarChart3 className="w-6 h-6" strokeWidth={2} />
+              </div>
+              <h3 className="font-display text-xl font-extrabold text-text-primary">Real-Time Analytics</h3>
             </div>
-            <h3 className="text-lg font-semibold text-white">Sub-millisecond Resolution</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Redis cache-aside strategy ensures high-speed redirects even under heavy traffic spikes.
+            <p className="text-base text-text-secondary leading-relaxed">
+              Track clicks by location, device, browser, and referral source. All visitor data is anonymized to ensure complete privacy.
+            </p>
+            <div className="flex gap-2 flex-wrap pt-2">
+              {['Countries', 'Devices', 'Browsers', 'Sources'].map((t) => (
+                <span key={t} className="mono-pill text-xs font-bold px-3 py-1">{t}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Tile 2 */}
+          <div className="bg-surface border border-hairline rounded-2xl p-8 space-y-4 shadow-md">
+            <div className="p-3 rounded-xl bg-surface-2 border border-hairline text-text-primary w-fit">
+              <QrCode className="w-6 h-6" strokeWidth={2} />
+            </div>
+            <h3 className="font-display text-xl font-extrabold text-text-primary">Custom QR Codes</h3>
+            <p className="text-sm text-text-secondary leading-relaxed">
+              Generate customizable QR codes with custom colors and download them in PNG or SVG formats.
             </p>
           </div>
 
-          <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-slate-700 transition-colors">
-            <div className="p-3 bg-cyan-500/10 border border-cyan-500/20 text-cyan-400 rounded-xl w-fit">
-              <BarChart3 className="w-6 h-6" />
+          {/* Tile 3 */}
+          <div className="bg-surface border border-hairline rounded-2xl p-8 space-y-4 shadow-md">
+            <div className="p-3 rounded-xl bg-surface-2 border border-hairline text-text-primary w-fit">
+              <Shield className="w-6 h-6" strokeWidth={2} />
             </div>
-            <h3 className="text-lg font-semibold text-white">Real-Time Analytics</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Track clicks, unique visitors, devices, browsers, and geographic country distributions.
+            <h3 className="font-display text-xl font-extrabold text-text-primary">Advanced Security</h3>
+            <p className="text-sm text-text-secondary leading-relaxed">
+              Protect your links from spam, rate limit abuse, and unauthorized access with built-in security guards.
             </p>
           </div>
 
-          <div className="bg-slate-900/60 border border-slate-800/80 p-6 rounded-2xl space-y-4 hover:border-slate-700 transition-colors">
-            <div className="p-3 bg-violet-500/10 border border-violet-500/20 text-violet-400 rounded-xl w-fit">
-              <Lock className="w-6 h-6" />
+          {/* Tile 4 */}
+          <div className="md:col-span-2 bg-surface border border-hairline rounded-2xl p-8 space-y-4 shadow-md flex flex-col sm:flex-row gap-6">
+            <div className="flex-1 space-y-3">
+              <div className="p-3 rounded-xl bg-surface-2 border border-hairline text-text-primary w-fit">
+                <Zap className="w-6 h-6" strokeWidth={2} />
+              </div>
+              <h3 className="font-display text-xl font-extrabold text-text-primary">Instant Redirection</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                Links open in less than 100ms so your visitors never experience delay or waiting screens.
+              </p>
             </div>
-            <h3 className="text-lg font-semibold text-white">Security & Password Protection</h3>
-            <p className="text-slate-400 text-sm leading-relaxed">
-              Protect links with custom passwords, set expiration dates, and trigger automatic SSRF guards.
-            </p>
+            <div className="flex-1 space-y-3">
+              <div className="p-3 rounded-xl bg-surface-2 border border-hairline text-text-primary w-fit">
+                <Lock className="w-6 h-6" strokeWidth={2} />
+              </div>
+              <h3 className="font-display text-xl font-extrabold text-text-primary">Password Protection</h3>
+              <p className="text-sm text-text-secondary leading-relaxed">
+                Set a password on any link so only people with the key can open the destination URL.
+              </p>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Bottom CTA */}
+      <section className="max-w-3xl mx-auto px-4 pb-24 text-center space-y-6">
+        <h2 className="font-display text-3xl sm:text-5xl font-extrabold text-text-primary tracking-tight">
+          Start shortening links today
+        </h2>
+        <p className="text-text-secondary text-base">No credit card required. Free account includes 50 links with full analytics.</p>
+        <div>
+          <Link to="/register">
+            <Button size="lg" icon={ArrowRight} className="px-8 py-3.5 text-sm sm:text-base">Create Free Account</Button>
+          </Link>
         </div>
       </section>
     </div>

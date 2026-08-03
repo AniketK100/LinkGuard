@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Wrench } from 'lucide-react';
 import api from '../../lib/axios';
 
 export function AdminConfigPage() {
@@ -7,44 +6,37 @@ export function AdminConfigPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetchConfigs();
+    api.get('/api/v1/admin/configurations').then((res) => {
+      if (res.data?.success) setConfigs(res.data.data || []);
+    }).finally(() => setLoading(false));
   }, []);
 
-  const fetchConfigs = () => {
-    setLoading(true);
-    api.get('/api/v1/admin/configurations').then((res) => {
-      if (res.data?.success) {
-        setConfigs(res.data.data || []);
-      }
-    }).finally(() => setLoading(false));
-  };
-
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl">
       <div>
-        <h1 className="text-2xl font-bold text-white tracking-tight">System Settings & Configurations</h1>
-        <p className="text-xs text-slate-400">Global system runtime key-value configuration overrides.</p>
+        <h1 className="text-lg font-bold text-text-primary">System Runtime Configurations</h1>
+        <p className="text-xs text-text-tertiary mt-0.5">Global key-value configuration overrides.</p>
       </div>
 
-      <div className="bg-slate-900/80 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      <div className="bg-surface border border-hairline rounded-xl overflow-hidden">
         {loading ? (
-          <div className="p-8 text-center text-slate-500 text-xs">Loading configurations...</div>
+          <div className="p-8 text-center text-xs text-text-tertiary">Loading configurations…</div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-slate-300">
-              <thead className="bg-slate-950/50 text-slate-400 uppercase tracking-wider border-b border-slate-800">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-surface-2 text-text-tertiary uppercase tracking-wider text-[9px] font-semibold border-b border-hairline">
                 <tr>
-                  <th className="px-6 py-3 font-semibold">Config Key</th>
-                  <th className="px-6 py-3 font-semibold">Config Value</th>
-                  <th className="px-6 py-3 font-semibold">Description</th>
+                  <th className="px-4 py-2.5">Config Key</th>
+                  <th className="px-4 py-2.5">Value</th>
+                  <th className="px-4 py-2.5">Description</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-slate-800/60">
+              <tbody className="divide-y divide-hairline font-mono text-[11px]">
                 {configs.map((c) => (
-                  <tr key={c.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="px-6 py-4 font-mono font-semibold text-emerald-400">{c.configKey}</td>
-                    <td className="px-6 py-4 font-mono text-white">{c.configValue}</td>
-                    <td className="px-6 py-4 text-slate-400">{c.description}</td>
+                  <tr key={c.id} className="hover:bg-surface-2/50 transition-colors duration-100">
+                    <td className="px-4 py-3 font-bold text-accent">{c.configKey}</td>
+                    <td className="px-4 py-3 text-text-primary">{c.configValue}</td>
+                    <td className="px-4 py-3 text-text-secondary font-sans">{c.description}</td>
                   </tr>
                 ))}
               </tbody>

@@ -1,55 +1,46 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Github, Twitter, Linkedin } from 'lucide-react';
+import { Shield } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="bg-slate-950 border-t border-slate-800/80 text-slate-400 text-sm">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="border-t border-hairline text-text-secondary bg-canvas w-full">
+      <div className="w-full max-w-[92rem] mx-auto px-6 sm:px-10 lg:px-16 py-16 lg:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 lg:gap-16">
+        {/* Brand Column */}
         <div className="space-y-4">
-          <div className="flex items-center gap-2.5 font-bold text-lg text-white">
-            <div className="p-1.5 bg-emerald-500 rounded-md text-slate-950">
-              <Shield className="w-4 h-4" />
+          <div className="flex items-center gap-3 text-text-primary">
+            <div className="w-9 h-9 bg-slate-900 text-white dark:bg-[#18181B] dark:text-white dark:border dark:border-[#27272A] rounded-xl flex items-center justify-center shadow-md">
+              <Shield className="w-5 h-5" strokeWidth={2.5} />
             </div>
-            <span>LinkGuard</span>
+            <span className="font-display font-extrabold text-xl tracking-tight text-text-primary">LinkGuard</span>
           </div>
-          <p className="text-xs text-slate-500 leading-relaxed">
-            Enterprise intelligent URL management, high-performance redirect engine, custom QR codes, and real-time security analytics.
+          <p className="text-text-secondary text-sm leading-relaxed max-w-sm font-sans">
+            Fast, secure URL shortener with real-time analytics, privacy protection, and customizable QR codes.
           </p>
         </div>
 
-        <div>
-          <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-4">Product</h4>
-          <ul className="space-y-2 text-xs">
-            <li><Link to="/features" className="hover:text-white transition-colors">Features</Link></li>
-            <li><Link to="/pricing" className="hover:text-white transition-colors">Pricing</Link></li>
-            <li><Link to="/dashboard" className="hover:text-white transition-colors">Analytics</Link></li>
-            <li><Link to="/dashboard" className="hover:text-white transition-colors">QR Code Generator</Link></li>
-          </ul>
-        </div>
-
-        <div>
-          <h4 className="text-white font-semibold text-xs uppercase tracking-wider mb-4">Company</h4>
-          <ul className="space-y-2 text-xs">
-            <li><Link to="/about" className="hover:text-white transition-colors">About Us</Link></li>
-            <li><Link to="/contact" className="hover:text-white transition-colors">Contact</Link></li>
-            <li><a href="#" className="hover:text-white transition-colors">Privacy Policy</a></li>
-            <li><a href="#" className="hover:text-white transition-colors">Terms of Service</a></li>
-          </ul>
-        </div>
-
-        <div className="space-y-4">
-          <h4 className="text-white font-semibold text-xs uppercase tracking-wider">Connect</h4>
-          <div className="flex gap-3 text-slate-400">
-            <a href="#" className="p-2 rounded-lg bg-slate-900 hover:text-white transition-colors border border-slate-800"><Github className="w-4 h-4" /></a>
-            <a href="#" className="p-2 rounded-lg bg-slate-900 hover:text-white transition-colors border border-slate-800"><Twitter className="w-4 h-4" /></a>
-            <a href="#" className="p-2 rounded-lg bg-slate-900 hover:text-white transition-colors border border-slate-800"><Linkedin className="w-4 h-4" /></a>
+        {/* Links Columns */}
+        {[
+          { title: 'NAVIGATION', links: [['Home','/'],['Features','/features'],['Pricing','/pricing'],['About Us','/about']] },
+          { title: 'TOPICS', links: [['Analytics Dashboard','/dashboard/analytics'],['QR Code Studio','/dashboard/qr-codes'],['Instant Redirection','/features'],['Password Protection','/features']] },
+          { title: 'SUPPORT', links: [['Contact Us','/contact'],['Privacy Policy','#'],['Terms Policy','#'],['API Documentation','#']] },
+        ].map((section) => (
+          <div key={section.title} className="space-y-4">
+            <h4 className="text-text-primary font-extrabold text-xs uppercase tracking-widest">{section.title}</h4>
+            <ul className="space-y-3 text-sm font-medium">
+              {section.links.map(([label, path]) => (
+                <li key={label}>
+                  <Link to={path} className="text-text-secondary hover:text-text-primary transition-colors duration-150 block py-0.5">{label}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        ))}
       </div>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500 gap-4">
-        <span>&copy; {new Date().getFullYear()} LinkGuard Platform. All rights reserved.</span>
-        <span>Built with Java 21 & React 19</span>
+
+      {/* Bottom Bar */}
+      <div className="w-full max-w-[92rem] mx-auto px-6 sm:px-10 lg:px-16 py-6 border-t border-hairline flex flex-col sm:flex-row justify-between items-center text-xs sm:text-sm text-text-tertiary gap-4">
+        <span>&copy; {new Date().getFullYear()} LinkGuard Platform Inc. All rights reserved.</span>
       </div>
     </footer>
   );
