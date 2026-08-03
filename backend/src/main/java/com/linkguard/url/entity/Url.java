@@ -69,6 +69,10 @@ public class Url {
     @Builder.Default
     private Instant updatedAt = Instant.now();
 
+    public boolean isCustomAlias() {
+        return isCustomAlias;
+    }
+
     @PreUpdate
     public void preUpdate() {
         this.updatedAt = Instant.now();
