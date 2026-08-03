@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: linkguard-backend
+    env: docker
+    dockerfilePath: docker/Dockerfile.backend
+    dockerContext: .
+    region: singapore
+    plan: starter
+    healthCheckPath: /actuator/health/readiness
+    envVars:
+      - key: SPRING_PROFILES_ACTIVE
+        value: prod
+      - key: PORT
+        value: 8080
+      - key: SPRING_DATASOURCE_URL
+        sync: false
+        # Placeholder: jdbc:postgresql://ep-example.neon.tech/linkguard_db?sslmode=require
+      - key: SPRING_DATASOURCE_USERNAME
+        sync: false
+      - key: SPRING_DATASOURCE_PASSWORD
+        sync: false
+      - key: REDIS_URL
+        sync: false
+        # Placeholder: rediss://default:token@upstash.io:6379
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_ACCESS_EXPIRATION
+        value: "900"
+      - key: JWT_REFRESH_EXPIRATION
+        value: "604800"
+      - key: SECURITY_IP_HASH_SALT
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://linkguard.vercel.app
+      - key: CLOUDINARY_CLOUD_NAME
+        value: placeholder_cloud_name
+      - key: CLOUDINARY_API_KEY
+        value: placeholder_api_key
+      - key: CLOUDINARY_API_SECRET
+        value: placeholder_api_secret

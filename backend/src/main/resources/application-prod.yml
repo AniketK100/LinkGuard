@@ -1,5 +1,6 @@
 server:
   port: ${PORT:8080}
+  shutdown: graceful
 
 spring:
   datasource:
@@ -17,3 +18,7 @@ logging:
   level:
     root: WARN
     com.linkguard: INFO
+
+springdoc:
+  swagger-ui:
+    enabled: false

@@ -1,79 +1,74 @@
-# LinkGuard — Intelligent URL Management & Analytics Platform
+# LinkGuard 🛡️
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Architecture: Modular Monolith](https://img.shields.io/badge/Architecture-Modular%20Monolith-orange.svg)](#architecture)
+**Intelligent URL Management & Real-Time Analytics Platform**
 
-**LinkGuard** is an intelligent URL management and analytics platform engineered with a high-performance **Modular Monolith** architecture in Java and Spring Boot, coupled with a modern React SPA dashboard.
-
----
-
-## 🌟 Key Capabilities
-
-- **URL Shortening & Custom Aliases**: Base62 short code generation with automatic collision retries and reserved-word filtering.
-- **High-Performance Redirect Engine**: Sub-100ms p95 redirect latency backed by Redis cache-aside reads.
-- **Asynchronous Click Analytics**: Non-blocking `@Async` click event recording with IP anonymization (SHA-256 + salt), User-Agent parsing, and geo-location classification.
-- **Advanced Link Security**: Expiring links, bcrypt password-protected links, domain blacklist checks, and Redis rate limiting.
-- **Rich Analytics Dashboard**: Real-time traffic breakdown by browser, OS, device, country, and time-series charts.
-- **QR Code Generation**: PNG stream generation for every short link.
+LinkGuard is an enterprise-grade, modular monolith web platform for short link creation, password-protected redirects, QR code customization, privacy-compliant traffic telemetry, and administrative security threat monitoring.
 
 ---
 
-## 🏗️ Architecture & Technology Stack
+## 🚀 Key Features
 
-```
-LinkGuard Monolith
-├── backend/       # Spring Boot Application (Java LTS, Spring Security, Spring Data JPA, Redis, Flyway)
-├── frontend/      # React SPA (Vite, Tailwind CSS, Axios, React Router, TanStack Query)
-├── docker/        # Multi-stage Dockerfiles
-├── docs/          # Product & Technical Specifications
-└── .github/       # Automated CI Workflows
-```
-
-### Stack Overview
-- **Backend**: Java (Latest LTS), Spring Boot (Latest Stable), Spring Security (JWT), Spring Data JPA, PostgreSQL, Redis, Flyway, Maven
-- **Frontend**: React (Latest Stable), Vite, Tailwind CSS, Axios, React Router, TanStack Query
-- **Docs & Testing**: OpenAPI / Swagger (`springdoc-openapi`), JUnit 5, Mockito
-- **DevOps**: Docker, Docker Compose, GitHub Actions
+- **High-Performance Redirect Engine**: Sub-millisecond URL resolution backed by Redis cache-aside and fail-open PostgreSQL database fallback.
+- **Custom Aliases & Base62 Generation**: Create brandable short slugs with automated collision retry logic.
+- **Dynamic & Static QR Code Studio**: Render high-resolution PNG and SVG QR codes with custom foreground/background colors.
+- **Privacy-Compliant Analytics**: SHA-256 IP anonymization (raw IPs are never stored) with real-time country, device, browser, OS, and referrer telemetry.
+- **Enterprise Security**: JWT access/refresh token rotation with reuse detection, rate limiting, SSRF host protection, and role-based access control (RBAC).
+- **Admin Dashboard & Moderation**: System health monitoring, global URL moderation, user banning/role management, and audit log history.
 
 ---
 
-## 🚀 Quick Start (Local Development)
+## 🛠️ Technology Stack
 
-### Prerequisites
-- Docker & Docker Compose
-- Java JDK (Latest LTS) & Maven (optional for containerized setup)
-- Node.js (Latest LTS) & npm (optional for containerized setup)
+| Layer | Technology |
+| :--- | :--- |
+| **Backend** | Java 21 (LTS), Spring Boot 3.4.2, Spring Security, Spring Data JPA, Hibernate, JJWT 0.13.0, MapStruct, Lombok, Maven |
+| **Database** | PostgreSQL 18, Flyway DB Migrations (V1 to V6) |
+| **Cache** | Redis 8 (Cache-Aside + Rate Limiter) |
+| **Frontend** | React 19, Vite 6.1, Tailwind CSS 3.4 / 4, Axios, React Router 7, TanStack Query 5, Lucide Icons |
+| **DevOps** | Docker, Docker Compose, Nginx, Actuator Health & Readiness Probes, GitHub Actions CI Pipeline |
 
-### 1. Environment Setup
-Copy the environment template:
+---
+
+## 📋 API Endpoints Overview
+
+| Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Register new user account |
+| `POST` | `/api/auth/login` | Login and issue access & refresh tokens |
+| `POST` | `/api/auth/refresh` | Rotate refresh token |
+| `POST` | `/api/v1/urls` | Create short URL or custom alias |
+| `GET` | `/api/v1/urls` | Get user's short URLs (paginated) |
+| `GET` | `/{shortCode}` | Public redirect execution (302 Found) |
+| `POST` | `/{shortCode}/verify` | Unlock password-protected short link |
+| `GET` | `/api/v1/analytics/{urlId}` | Get complete URL analytics telemetry |
+| `GET` | `/api/v1/qr-codes/{id}/download` | Download PNG/SVG QR code image |
+| `GET` | `/api/v1/admin/dashboard` | Admin platform metrics & system health |
+
+---
+
+## ⚙️ Quick Start
+
+### 1. Run with Docker Compose
 ```bash
-cp .env.example .env
+docker compose up -d --build
 ```
+- Frontend UI: `http://localhost:3000`
+- Backend API: `http://localhost:8080`
+- Swagger OpenAPI: `http://localhost:8080/swagger-ui.html`
 
-### 2. Start Services with Docker Compose
+### 2. Manual Development Setup
 ```bash
-docker-compose up --build
+# Backend
+cd backend
+mvn spring-boot:run
+
+# Frontend
+cd frontend
+npm install
+npm run dev
 ```
-
-Access the applications:
-- **Frontend Dashboard**: `http://localhost:3000`
-- **Backend REST API**: `http://localhost:8080`
-- **Swagger OpenAPI Documentation**: `http://localhost:8080/swagger-ui.html`
-
----
-
-## 📚 Project Documentation
-
-The repository contains comprehensive technical documentation in the [`docs/`](./docs) directory:
-
-1. [Product Requirements Document (PRD)](./docs/01_PRD.md)
-2. [Technical Requirements Document (TRD)](./docs/02_TRD.md)
-3. [Application Flow & Sequence Diagrams](./docs/03_App_Flow.md)
-4. [UI/UX Design Brief & Wireframes](./docs/04_UIUX_Design_Brief.md)
-5. [Backend Schema, Data Model & Auth Contracts](./docs/05_Backend_Schema_Data_Auth.md)
-6. [Implementation Plan & Engineering Roadmap](./docs/06_Implementation_Plan_Build_Order.md)
 
 ---
 
 ## 📄 License
-This project is licensed under the MIT License.
+Released under the MIT License. Built with Java 21 & React 19.

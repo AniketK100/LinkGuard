@@ -1,0 +1,13 @@
+-- Migration V2: Add enhanced management fields to urls table
+
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS custom_alias VARCHAR(30);
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS title VARCHAR(255);
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS description TEXT;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS is_custom_alias BOOLEAN DEFAULT false;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS click_count BIGINT DEFAULT 0;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS last_accessed_at TIMESTAMP;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS deleted_at TIMESTAMP;
+ALTER TABLE urls ADD COLUMN IF NOT EXISTS updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
+
+CREATE INDEX IF NOT EXISTS idx_urls_deleted_at ON urls(deleted_at);
+CREATE INDEX IF NOT EXISTS idx_urls_custom_alias ON urls(custom_alias);

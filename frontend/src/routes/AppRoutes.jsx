@@ -1,17 +1,76 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import RootLayout from '../layouts/RootLayout';
+
+// Layouts
+import PublicLayout from '../layouts/PublicLayout';
+import UserLayout from '../layouts/UserLayout';
+import AdminLayout from '../layouts/AdminLayout';
+
+// Public Pages
+import LandingPage from '../pages/public/LandingPage';
+import FeaturesPage from '../pages/public/FeaturesPage';
+import PricingPage from '../pages/public/PricingPage';
+import AboutPage from '../pages/public/AboutPage';
+import ContactPage from '../pages/public/ContactPage';
+import LoginPage from '../pages/public/LoginPage';
+import RegisterPage from '../pages/public/RegisterPage';
+import PasswordVerifyPage from '../pages/public/PasswordVerifyPage';
+
+// User Pages
+import UserDashboard from '../pages/user/UserDashboard';
+import UrlManagementPage from '../pages/user/UrlManagementPage';
+import AnalyticsPage from '../pages/user/AnalyticsPage';
+import QrCodePage from '../pages/user/QrCodePage';
+import NotificationsPage from '../pages/user/NotificationsPage';
+import ProfilePage from '../pages/user/ProfilePage';
+import SettingsPage from '../pages/user/SettingsPage';
+
+// Admin Pages
+import AdminDashboard from '../pages/admin/AdminDashboard';
+import AdminUsersPage from '../pages/admin/AdminUsersPage';
+import AdminUrlsPage from '../pages/admin/AdminUrlsPage';
+import AdminAnalyticsPage from '../pages/admin/AdminAnalyticsPage';
+import AdminSecurityPage from '../pages/admin/AdminSecurityPage';
+import AdminAuditPage from '../pages/admin/AdminAuditPage';
+import AdminReportsPage from '../pages/admin/AdminReportsPage';
+import AdminConfigPage from '../pages/admin/AdminConfigPage';
 
 export function AppRoutes() {
   return (
     <Routes>
-      <Route path="/" element={<RootLayout />}>
-        <Route index element={
-          <div className="p-8 text-center bg-white rounded-lg border border-slate-200 shadow-sm">
-            <h2 className="text-2xl font-semibold text-slate-800 mb-2">Welcome to LinkGuard</h2>
-            <p className="text-slate-600">Frontend Foundation Initialized Successfully.</p>
-          </div>
-        } />
+      {/* Public Routes */}
+      <Route path="/" element={<PublicLayout />}>
+        <Route index element={<LandingPage />} />
+        <Route path="features" element={<FeaturesPage />} />
+        <Route path="pricing" element={<PricingPage />} />
+        <Route path="about" element={<AboutPage />} />
+        <Route path="contact" element={<ContactPage />} />
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
+        <Route path=":shortCode/verify" element={<PasswordVerifyPage />} />
+      </Route>
+
+      {/* User Dashboard Routes */}
+      <Route path="/dashboard" element={<UserLayout />}>
+        <Route index element={<UserDashboard />} />
+        <Route path="urls" element={<UrlManagementPage />} />
+        <Route path="analytics" element={<AnalyticsPage />} />
+        <Route path="qr-codes" element={<QrCodePage />} />
+        <Route path="notifications" element={<NotificationsPage />} />
+        <Route path="profile" element={<ProfilePage />} />
+        <Route path="settings" element={<SettingsPage />} />
+      </Route>
+
+      {/* Admin Portal Routes */}
+      <Route path="/admin" element={<AdminLayout />}>
+        <Route path="dashboard" element={<AdminDashboard />} />
+        <Route path="users" element={<AdminUsersPage />} />
+        <Route path="urls" element={<AdminUrlsPage />} />
+        <Route path="analytics" element={<AdminAnalyticsPage />} />
+        <Route path="security" element={<AdminSecurityPage />} />
+        <Route path="audit" element={<AdminAuditPage />} />
+        <Route path="reports" element={<AdminReportsPage />} />
+        <Route path="config" element={<AdminConfigPage />} />
       </Route>
     </Routes>
   );
