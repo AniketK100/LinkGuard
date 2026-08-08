@@ -14,6 +14,7 @@
 Thumbs.db
 
 # Java & Maven (Backend)
+target/
 backend/target/
 backend/.mvn/
 backend/mvnw

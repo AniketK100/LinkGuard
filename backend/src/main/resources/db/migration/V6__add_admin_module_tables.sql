@@ -33,5 +33,4 @@ INSERT INTO system_configurations (config_key, config_value, description)
 VALUES 
     ('site.name', 'LinkGuard Platform', 'Official site display title'),
     ('urls.max_per_anonymous', '5', 'Max short URLs allowed per anonymous session'),
-    ('ratelimit.requests_per_minute', '120', 'Global HTTP rate limit per IP per minute')
-ON CONFLICT (config_key) DO NOTHING;
+    ('ratelimit.requests_per_minute', '120', 'Global HTTP rate limit per IP per minute');
