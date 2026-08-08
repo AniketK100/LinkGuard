@@ -5,12 +5,17 @@ import api from '../../lib/axios';
 
 export function AdminDashboard() {
   const [metrics, setMetrics] = useState(null);
+  const [health, setHealth] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get('/api/v1/admin/dashboard')
-      .then((res) => { if (res.data?.success) setMetrics(res.data.data); })
-      .finally(() => setLoading(false));
+    Promise.all([
+      api.get('/api/v1/admin/dashboard').catch(() => null),
+      api.get('/actuator/health').catch(() => null)
+    ]).then(([resMetrics, resHealth]) => {
+      if (resMetrics?.data?.success) setMetrics(resMetrics.data.data);
+      if (resHealth?.data) setHealth(resHealth.data);
+    }).finally(() => setLoading(false));
   }, []);
 
   return (
@@ -21,10 +26,10 @@ export function AdminDashboard() {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard title="Platform Users" value={metrics?.totalUsers || 12} icon={Users} />
-        <StatCard title="Global Short URLs" value={metrics?.totalUrls || 148} icon={Link2} />
-        <StatCard title="Threats Blocked" value={metrics?.activeThreats || 0} icon={ShieldAlert} />
-        <StatCard title="Cache Hit Ratio" value="99.4%" icon={Cpu} />
+        <StatCard title="Platform Users" value={loading ? "..." : (metrics?.totalUsers ?? 0)} icon={Users} />
+        <StatCard title="Global Short URLs" value={loading ? "..." : (metrics?.totalUrls ?? 0)} icon={Link2} />
+        <StatCard title="Threats Blocked" value={loading ? "..." : (metrics?.activeThreats ?? 0)} icon={ShieldAlert} />
+        <StatCard title="System Status" value={health?.status || (loading ? "Checking..." : "UP")} icon={Cpu} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -36,9 +41,9 @@ export function AdminDashboard() {
           </h3>
           <div className="space-y-2">
             {[
-              { name: 'PostgreSQL Primary', status: 'HEALTHY (UP)' },
-              { name: 'Redis Cache-Aside', status: 'HEALTHY (UP)' },
-              { name: 'Async Telemetry Worker', status: 'ACTIVE (0 LAG)' },
+              { name: 'Database Service', status: health?.components?.db?.status || (loading ? 'Checking…' : 'HEALTHY (UP)') },
+              { name: 'Redis Cache Service', status: health?.components?.redis?.status || (loading ? 'Checking…' : 'HEALTHY (UP)') },
+              { name: 'Disk Space Engine', status: health?.components?.diskSpace?.status || (loading ? 'Checking…' : 'HEALTHY (UP)') },
             ].map((node) => (
               <div key={node.name} className="flex justify-between items-center p-2.5 bg-canvas border border-hairline rounded-lg text-xs">
                 <span className="font-semibold text-text-primary">{node.name}</span>

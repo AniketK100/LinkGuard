@@ -66,10 +66,10 @@ export function UserDashboard() {
 
       {/* KPI row */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard title="Total Links" value={urls.length} icon={Link2} change="12%" trend="up" />
-        <StatCard title="Total Clicks" value={totalClicks} icon={MousePointer} change="24%" trend="up" />
+        <StatCard title="Total Links" value={urls.length} icon={Link2} />
+        <StatCard title="Total Clicks" value={totalClicks} icon={MousePointer} />
         <StatCard title="Active QR Codes" value={urls.length} icon={QrCode} />
-        <StatCard title="Security Level" value="100%" icon={Shield} />
+        <StatCard title="Security Mode" value="SHA-256" icon={Shield} />
       </div>
 
       {/* Data table */}

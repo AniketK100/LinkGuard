@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Shield, Search, LogOut, LayoutDashboard, Sun, Moon } from 'lucide-react';
+import { Shield, Search, LogOut, LayoutDashboard, Sun, Moon, Menu, X } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import CommandPalette from './CommandPalette';
@@ -11,15 +11,20 @@ export function Navbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [isCommandOpen, setIsCommandOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
-  const isMarketing = ['/', '/features', '/pricing', '/about', '/contact'].includes(location.pathname);
+  const isMarketing = ['/', '/features', '/pricing', '/about', '/contact', '/privacy', '/terms'].includes(location.pathname);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 30);
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -35,10 +40,10 @@ export function Navbar() {
   const handleLogout = () => { logout(); navigate('/'); };
 
   return (
-    <>
-      <nav className={`sticky top-0 z-40 transition-all duration-200 ${
-        scrolled ? 'glass border-b border-hairline' : 'bg-canvas border-b border-hairline'
-      }`}>
+    <header role="banner" className={`sticky top-0 z-40 transition-all duration-200 ${
+      scrolled ? 'glass border-b border-hairline' : 'bg-canvas border-b border-hairline'
+    }`}>
+      <nav role="navigation" aria-label="Main Navigation">
         <div className="max-w-[92rem] mx-auto px-6 sm:px-10 lg:px-16 h-18 sm:h-20 flex items-center justify-between gap-4">
           {/* Logo */}
           <Link to="/" className="flex items-center gap-3 group">
@@ -59,7 +64,7 @@ export function Navbar() {
           </button>
 
           {/* Right Nav Links & Actions */}
-          <div className="flex items-center gap-4 sm:gap-6">
+          <div className="flex items-center gap-3 sm:gap-6">
             {isMarketing && (
               <div className="hidden md:flex items-center gap-6 text-xs font-extrabold uppercase tracking-widest text-text-primary">
                 {[['Features','/features'],['Pricing','/pricing'],['About','/about'],['Contact','/contact']].map(([label, path]) => (
@@ -70,7 +75,7 @@ export function Navbar() {
               </div>
             )}
 
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 sm:gap-3">
               {/* Theme Toggle Circle Pill */}
               <button
                 onClick={toggleTheme}
@@ -82,18 +87,19 @@ export function Navbar() {
               </button>
 
               {user ? (
-                <div className="flex items-center gap-2.5">
+                <div className="flex items-center gap-2">
                   <Link
                     to={isAdmin ? '/admin/dashboard' : '/dashboard'}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-text-primary text-canvas text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all duration-100 shadow-sm"
+                    className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-text-primary text-canvas text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all duration-100 shadow-sm"
                   >
                     <LayoutDashboard className="w-3.5 h-3.5" />
-                    <span>Dashboard</span>
+                    <span className="hidden sm:inline">Dashboard</span>
                   </Link>
                   <button
                     onClick={handleLogout}
                     className="p-2.5 rounded-full text-text-tertiary hover:text-text-primary hover:bg-surface-2 border border-hairline transition-all duration-100"
                     title="Sign Out"
+                    aria-label="Sign Out"
                   >
                     <LogOut className="w-4 h-4" />
                   </button>
@@ -101,18 +107,46 @@ export function Navbar() {
               ) : (
                 <Link
                   to="/login"
-                  className="px-6 py-2.5 rounded-full bg-text-primary text-canvas text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all duration-100 shadow-md"
+                  className="px-5 sm:px-6 py-2.5 rounded-full bg-text-primary text-canvas text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all duration-100 shadow-md"
                 >
                   Sign In
                 </Link>
               )}
+
+              {/* Mobile Menu Hamburger */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 rounded-xl bg-surface-2 border border-hairline text-text-primary"
+                aria-label="Toggle Mobile Menu"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
         </div>
-      </nav>
 
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-hairline bg-surface p-6 space-y-4 animate-fade-in shadow-xl">
+            <button
+              onClick={() => { setIsCommandOpen(true); setMobileMenuOpen(false); }}
+              className="w-full flex items-center gap-3 px-4 py-3 bg-surface-2 border border-hairline rounded-xl text-xs text-text-secondary"
+            >
+              <Search className="w-4 h-4" />
+              <span>Search links & command palette…</span>
+            </button>
+            <div className="flex flex-col gap-3 pt-2 text-sm font-extrabold uppercase tracking-wider text-text-primary">
+              {[['Features','/features'],['Pricing','/pricing'],['About','/about'],['Contact','/contact'],['Privacy','/privacy'],['Terms','/terms']].map(([label, path]) => (
+                <Link key={path} to={path} className="py-2 border-b border-hairline/50 hover:opacity-80">
+                  {label}
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+      </nav>
       <CommandPalette isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />
-    </>
+    </header>
   );
 }
 

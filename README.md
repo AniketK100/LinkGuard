@@ -39,56 +39,29 @@ flowchart TD
     ReturnURL -->|302 Redirect| Target[Destination Website]
 ```
 
-### Request Lifecycle Sequence
-
-```mermaid
-sequenceDiagram
-    autonumber
-    actor User
-    participant Gateway as Nginx / Edge
-    participant App as Spring Boot Service
-    participant Cache as Redis 8
-    participant DB as PostgreSQL 18
-    
-    User->>Gateway: GET /{shortCode}
-    Gateway->>App: Forward Request + IP + User-Agent
-    App->>Cache: GET url:{shortCode}
-    alt Cache Hit
-        Cache-->>App: Return Original URL String
-    else Cache Miss
-        App->>DB: SELECT * FROM urls WHERE short_code = ?
-        DB-->>App: URL Entity Record
-        App->>Cache: SET url:{shortCode} = Original URL (TTL 24h)
-    end
-    App-->>User: 302 Found (Location: Original URL)
-    App->>App: Publish TelemetryEvent (Async)
-    App->>DB: INSERT INTO click_analytics (Anonymized IP, Country, Device)
-```
-
----
-
-## 🚀 Key Features
-
-- **Sub-100ms Redirection Engine**: Redis cache-aside pattern ensures lightning-fast link resolution with fail-open database fallback.
-- **Base62 & Custom Slugs**: Create short URLs with automatic Base62 collision resolution and custom branded slugs.
-- **Dynamic QR Code Studio**: Render high-resolution PNG and SVG QR codes with custom colors and logo embedding.
-- **Privacy-Compliant Analytics**: Real-time traffic breakdown by country, browser, OS, device type, and referral source with SHA-256 IP anonymization.
-- **Enterprise Security Controls**: Password-protected links, rate limiting, SSRF protection, JWT token rotation, and administrative audit logging.
-- **Dark & Light Mode UI**: Responsive UI built with React 19, Tailwind CSS, Plus Jakarta Sans, and Outfit display typography.
-
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Component | Description |
-| :--- | :--- | :--- |
-| **Backend Core** | Java 21 LTS | High-performance Java runtime with virtual threads support |
-| **Framework** | Spring Boot 3.4.2 | REST APIs, Spring Security, Spring Data JPA, Actuator |
-| **Caching Layer** | Redis 8.0 | Cache-aside redirection engine and rate limiting |
-| **Database** | PostgreSQL 18 | Persistent storage with Flyway database migration scripts |
-| **Frontend UI** | React 19 + Vite 6 | Fast SPA rendering with React Router 7 and TanStack Query |
-| **Styling** | Tailwind CSS 3.4 | Custom semantic token system with Dark/Light mode support |
-| **Containerization**| Docker Compose | Multi-container environment with Nginx proxy |
+| Layer | Component | Version | Description |
+| :--- | :--- | :--- | :--- |
+| **Backend Core** | Java JDK | 21 LTS | High-performance Java runtime |
+| **Framework** | Spring Boot | 3.4.2 | REST APIs, Spring Security, Spring Data JPA, Actuator |
+| **OpenAPI** | Springdoc OpenAPI | 2.8.5 | Swagger UI interactive documentation |
+| **Caching Layer** | Redis | 8.0 | Cache-aside redirection engine and rate limiting |
+| **Database** | PostgreSQL | 18 | Persistent storage with Flyway database migration scripts |
+| **Frontend UI** | React | 19.0.0 | Fast SPA rendering with React Router 7 and TanStack Query |
+| **Styling** | Tailwind CSS | 3.4.17 | Semantic token system with Dark/Light mode support |
+| **Containerization**| Docker Compose | 3.8 | Multi-container environment with Nginx proxy |
+
+---
+
+## 🔒 Hardened Security Features
+
+- **SHA-256 IP Anonymization**: All visitor telemetry IP addresses are cryptographically hashed using a daily salt before storage (GDPR compliant).
+- **Hardened Spring Security**: Explicit route authorization (`anyRequest().authenticated()`), Content Security Policy, X-Frame-Options DENY, and Referrer Policy headers.
+- **Role-Based Access Control**: Strict segregation between `ROLE_USER` workspace and `ROLE_ADMIN` threat control center.
+- **Dynamic CORS Controls**: Configurable allowed origins driven by `CORS_ORIGINS` environment variables.
 
 ---
 
@@ -96,50 +69,50 @@ sequenceDiagram
 
 | Method | Endpoint | Access | Description |
 | :--- | :--- | :--- | :--- |
-| `POST` | `/api/v1/auth/register` | Public | Register new user account |
-| `POST` | `/api/v1/auth/login` | Public | Authenticate user and issue JWT tokens |
-| `POST` | `/api/v1/urls` | User/Admin | Create short link or custom slug |
-| `GET` | `/api/v1/urls` | User/Admin | List user's active short links |
-| `GET` | `/{shortCode}` | Public | Execute 302 redirect to original target URL |
+| `POST` | `/api/auth/register` | Public | Register new user account |
+| `POST` | `/api/auth/login` | Public | Authenticate user and issue JWT token |
+| `POST` | `/api/v1/urls` | Public/User | Create short link or custom slug |
+| `GET` | `/api/v1/urls` | Authenticated | List user's active short links (paginated) |
+| `GET` | `/{shortCode}` | Public | Execute 302 redirect to target URL |
 | `POST` | `/{shortCode}/verify` | Public | Verify password for protected links |
-| `GET` | `/api/v1/analytics/{urlId}` | User/Admin | Get detailed traffic analytics for a link |
-| `GET` | `/api/v1/admin/dashboard` | Admin | System health, global link metrics, and audit logs |
+| `GET` | `/api/v1/analytics/{urlId}` | Authenticated | Get detailed traffic analytics for a link |
+| `GET` | `/api/v1/admin/dashboard` | Admin | Platform metrics and security event logs |
+| `GET` | `/actuator/health` | Public | Infrastructure health status check |
 
 ---
 
-## ⚙️ Quick Start Guide
+## ⚙️ Environment Configuration
 
-### Option 1: Launch with Docker Compose (Recommended)
+Copy `.env.example` to `.env` and configure key secrets:
 
-```bash
-# 1. Clone the repository
-git clone https://github.com/Sahil-Ghorpade/LinkGuard.git
-cd LinkGuard
-
-# 2. Start all services via Docker Compose
-docker compose up -d --build
+```env
+PORT=8080
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=linkguard_db
+DB_USER=linkguard_user
+DB_PASSWORD=your_password
+REDIS_HOST=localhost
+REDIS_PORT=6379
+JWT_SECRET=your_secure_256_bit_jwt_secret_key
+CORS_ORIGINS=http://localhost:3000,http://localhost:5173
 ```
 
-Access services at:
-- **Frontend UI**: [http://localhost:3000](http://localhost:3000)
-- **Backend API**: [http://localhost:8080](http://localhost:8080)
-- **Swagger Documentation**: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+---
 
-### Option 2: Local Development Setup
+## 🚀 Local Setup & Verification
 
-#### Backend (Spring Boot 3.4)
+### 1. Backend Build & Test
 ```bash
 cd backend
-mvn clean install
-mvn spring-boot:run
+mvn clean test
 ```
 
-#### Frontend (React 19 + Vite)
+### 2. Frontend Build & Test
 ```bash
 cd frontend
 npm install
 npm run build
-npm run dev
 ```
 
 ---

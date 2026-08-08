@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#08090B"/>
+  <rect x="60" y="60" width="1080" height="510" rx="32" fill="#0F1117" stroke="#1F2430" stroke-width="4"/>
+  <g transform="translate(120, 160)">
+    <rect width="96" height="96" rx="24" fill="#3B82F6"/>
+    <path d="M48 20L76 32V52C76 70 64 85 48 90C32 85 20 70 20 52V32L48 20Z" fill="#3B82F6" stroke="#FFFFFF" stroke-width="4"/>
+    <path d="M41 51L46 56L55 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="240" y="215" fill="#FFFFFF" font-family="Plus Jakarta Sans, sans-serif" font-size="48" font-weight="800">LinkGuard</text>
+  <text x="240" y="255" fill="#94A3B8" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="500">Secure URL Shortener &amp; Real-Time Link Analytics</text>
+  <text x="120" y="380" fill="#E2E8F0" font-family="Outfit, sans-serif" font-size="56" font-weight="800">Control room for your links.</text>
+  <text x="120" y="440" fill="#64748B" font-family="Plus Jakarta Sans, sans-serif" font-size="24">Sub-100ms Redirection • SHA-256 IP Privacy • Custom Vector QR Codes</text>
+</svg>

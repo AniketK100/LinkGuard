@@ -2,16 +2,200 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/og-image.webp" as="image" type="image/webp" />
+    <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="LinkGuard — Fast, secure URL shortener with real-time analytics and QR code studio." />
-    <title>LinkGuard — Control Room for Your Links</title>
+    <meta name="description" content="LinkGuard is a fast URL shortener. Create custom links, vector QR codes, and track real-time click analytics with SHA-256 IP privacy protection." />
+    <meta name="keywords" content="URL shortener, short link analytics, custom QR code generator, password protected links, privacy link protection, Base62 link shortener" />
+    <meta name="author" content="LinkGuard Engineering Team" />
+    <meta name="theme-color" content="#08090B" />
+    <link rel="canonical" href="https://linkguard.app/" />
+    <link rel="alternate" hreflang="en" href="https://linkguard.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://linkguard.app/" />
+
+    <!-- Open Graph Metadata -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="LinkGuard Platform" />
+    <meta property="og:title" content="LinkGuard — Fast & Secure URL Shortener" />
+    <meta property="og:description" content="LinkGuard is a fast URL shortener. Create custom links, vector QR codes, and track real-time click analytics with SHA-256 IP privacy protection." />
+    <meta property="og:url" content="https://linkguard.app/" />
+    <meta property="og:image" content="https://linkguard.app/og-image.webp" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+
+    <!-- Twitter Card Metadata -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LinkGuard — Fast & Secure URL Shortener" />
+    <meta name="twitter:description" content="LinkGuard is a fast URL shortener. Create custom links, vector QR codes, and track real-time click analytics with SHA-256 IP privacy protection." />
+    <meta name="twitter:image" content="https://linkguard.app/og-image.webp" />
+    <meta name="twitter:creator" content="@LinkGuardApp" />
+
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+
+    <!-- Enhanced E-E-A-T & JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://linkguard.app/#organization",
+          "name": "LinkGuard Platform Inc.",
+          "url": "https://linkguard.app",
+          "logo": "https://linkguard.app/logo.svg",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "support@linkguard.app",
+            "contactType": "customer support",
+            "availableLanguage": ["English"]
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "https://linkguard.app/#author",
+          "name": "LinkGuard Engineering Team",
+          "url": "https://linkguard.app"
+        },
+        {
+          "@type": "WebApplication",
+          "@id": "https://linkguard.app/#webapp",
+          "name": "LinkGuard URL Shortener",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "All",
+          "description": "Privacy-first URL shortener featuring sub-10ms memory caching, password protection, SHA-256 IP anonymization, and vector QR codes.",
+          "url": "https://linkguard.app",
+          "author": {
+            "@id": "https://linkguard.app/#author"
+          },
+          "publisher": {
+            "@id": "https://linkguard.app/#organization"
+          }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How fast does LinkGuard redirect links?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "LinkGuard uses Redis memory caching to resolve short links in under 10 milliseconds, ensuring visitors reach target destinations immediately without delay."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How is visitor IP privacy protected?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Every visitor IP address is transformed using SHA-256 cryptographic hashing with a daily secret salt before saving analytics. Raw IP addresses are never saved to disk."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What image formats can I export for QR codes?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "You can generate and download QR codes in high-resolution vector SVG format or standard PNG raster format with custom foreground and background colors."
+              }
+            }
+          ]
+        }
+      ]
+    }
+    </script>
+    <title>LinkGuard — Fast & Secure URL Shortener</title>
   </head>
   <body class="bg-canvas text-text-primary antialiased min-h-screen font-sans">
-    <div id="root"></div>
+    <div id="root">
+      <!-- SSR / SEO Human-Written Fallback HTML for Search Engines & AI Crawlers -->
+      <header role="banner">
+        <nav role="navigation" aria-label="Main Navigation">
+          <a href="/">
+            <img src="/logo.svg" alt="LinkGuard URL Shortener Logo" width="40" height="40" />
+            <span>LinkGuard</span>
+          </a>
+          <div>
+            <a href="/features">Features</a>
+            <a href="/pricing">Pricing</a>
+            <a href="/about">About Us</a>
+            <a href="/contact">Contact Support</a>
+            <a href="/privacy">Privacy Policy</a>
+            <a href="/terms">Terms of Service</a>
+          </div>
+        </nav>
+      </header>
+
+      <main id="main-content" role="main">
+        <article>
+          <h1 id="main-heading">LinkGuard — Fast &amp; Secure URL Shortener</h1>
+          <p>
+            Shorten long web addresses, build custom branded links, export vector QR codes, and measure traffic with privacy-first click analytics.
+          </p>
+
+          <section>
+            <h2>Why Use LinkGuard for URL Management?</h2>
+            <p>
+              Many URL shorteners log raw IP addresses or add redirection delays. LinkGuard is built on three simple principles:
+            </p>
+            <ul>
+              <li><strong>Sub-10ms Lookup Times:</strong> In-memory Redis caching resolves destination links in milliseconds before hitting primary database storage.</li>
+              <li><strong>SHA-256 IP Privacy:</strong> IP addresses pass through a cryptographic hashing function before saving telemetry, keeping your click stats GDPR-compliant.</li>
+              <li><strong>Vector QR Code Generation:</strong> Download scalable SVG or PNG QR codes with customizable color schemes for digital and print marketing.</li>
+            </ul>
+          </section>
+
+          <section>
+            <h2>Core Features</h2>
+            <div>
+              <div>
+                <h3>Custom Alias Creation</h3>
+                <p>Choose custom short link slugs that match your brand identity instead of random letters.</p>
+              </div>
+              <div>
+                <h3>Password Lock</h3>
+                <p>Protect confidential target links with a required password prompt before redirecting visitors.</p>
+              </div>
+              <div>
+                <h3>Real-Time Analytics</h3>
+                <p>Track total clicks, referring websites, country location data, and device distribution graphs.</p>
+              </div>
+            </div>
+          </section>
+
+          <section>
+            <h2>Frequently Asked Questions</h2>
+            <div>
+              <h3>How fast does LinkGuard redirect links?</h3>
+              <p>LinkGuard uses Redis memory caching to resolve short links in under 10 milliseconds, ensuring visitors reach target destinations immediately without delay.</p>
+
+              <h3>How is visitor IP privacy protected?</h3>
+              <p>Every visitor IP address is transformed using SHA-256 cryptographic hashing with a daily secret salt before saving analytics. Raw IP addresses are never saved to disk.</p>
+
+              <h3>What image formats can I export for QR codes?</h3>
+              <p>You can generate and download QR codes in high-resolution vector SVG format or standard PNG raster format with custom foreground and background colors.</p>
+            </div>
+          </section>
+
+          <section>
+            <h2>Contact &amp; Customer Support</h2>
+            <p>
+              LinkGuard is maintained by the LinkGuard Engineering Team. If you have questions or need technical support, email us at <a href="mailto:support@linkguard.app">support@linkguard.app</a> or send a message through our <a href="/contact">Contact Page</a>.
+            </p>
+          </section>
+        </article>
+      </main>
+
+      <footer role="contentinfo">
+        <p>&copy; 2026 LinkGuard Platform Inc. All rights reserved. Maintained by LinkGuard Engineering Team.</p>
+      </footer>
+    </div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>

@@ -7,7 +7,7 @@ export function PublicLayout() {
   return (
     <div className="min-h-screen flex flex-col bg-canvas text-text-primary font-sans">
       <Navbar />
-      <main className="flex-1">
+      <main id="main-content" role="main" className="flex-1">
         <Outlet />
       </main>
       <Footer />

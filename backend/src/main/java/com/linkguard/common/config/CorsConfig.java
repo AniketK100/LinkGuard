@@ -15,7 +15,14 @@ public class CorsConfig {
     public CorsFilter corsFilter() {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:*"));
+
+        String allowedOriginsEnv = System.getenv("CORS_ORIGINS");
+        if (allowedOriginsEnv != null && !allowedOriginsEnv.isBlank()) {
+            config.setAllowedOriginPatterns(List.of(allowedOriginsEnv.split(",")));
+        } else {
+            config.setAllowedOriginPatterns(List.of("http://localhost:3000", "http://localhost:5173", "http://127.0.0.1:*"));
+        }
+
         config.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type", "X-Correlation-ID"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         config.setExposedHeaders(List.of("X-Correlation-ID", "Location"));

@@ -4,7 +4,7 @@ import { Shield } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="border-t border-hairline text-text-secondary bg-canvas w-full">
+    <footer role="contentinfo" className="border-t border-hairline text-text-secondary bg-canvas w-full">
       <div className="w-full max-w-[92rem] mx-auto px-6 sm:px-10 lg:px-16 py-16 lg:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-10 lg:gap-16">
         {/* Brand Column */}
         <div className="space-y-4">
@@ -23,7 +23,7 @@ export function Footer() {
         {[
           { title: 'NAVIGATION', links: [['Home','/'],['Features','/features'],['Pricing','/pricing'],['About Us','/about']] },
           { title: 'TOPICS', links: [['Analytics Dashboard','/dashboard/analytics'],['QR Code Studio','/dashboard/qr-codes'],['Instant Redirection','/features'],['Password Protection','/features']] },
-          { title: 'SUPPORT', links: [['Contact Us','/contact'],['Privacy Policy','#'],['Terms Policy','#'],['API Documentation','#']] },
+          { title: 'SUPPORT', links: [['Contact Us','/contact'],['Privacy Policy','/privacy'],['Terms Policy','/terms']] },
         ].map((section) => (
           <div key={section.title} className="space-y-4">
             <h4 className="text-text-primary font-extrabold text-xs uppercase tracking-widest">{section.title}</h4>

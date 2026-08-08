@@ -57,7 +57,7 @@ export function LandingPage() {
       <div className="min-h-[calc(100vh-5rem)] flex flex-col justify-between">
         {/* Centered Hero Section */}
         <section className="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto px-4 py-8 text-center space-y-8 w-full">
-          <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.08]">
+          <h1 id="main-heading" className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.08]">
             Control room for<br />
             <span className="text-text-primary underline decoration-2 underline-offset-8">your links</span>
           </h1>
@@ -182,6 +182,67 @@ export function LandingPage() {
               </p>
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* How It Works Section */}
+      <section className="max-w-5xl mx-auto px-4 py-16 space-y-10 border-t border-hairline">
+        <div className="text-center space-y-3">
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+            How LinkGuard Works
+          </h2>
+          <p className="text-text-secondary text-base max-w-lg mx-auto">
+            Three simple steps to shorten, brand, and analyze your destination links.
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="bg-surface border border-hairline p-6 rounded-2xl space-y-3">
+            <span className="font-mono text-xs font-bold text-accent uppercase tracking-widest">Step 01</span>
+            <h3 className="text-lg font-bold text-text-primary">Paste & Customize</h3>
+            <p className="text-xs text-text-secondary leading-relaxed">
+              Input any long target URL. Optionally specify custom branded slugs and password locks.
+            </p>
+          </div>
+          <div className="bg-surface border border-hairline p-6 rounded-2xl space-y-3">
+            <span className="font-mono text-xs font-bold text-accent uppercase tracking-widest">Step 02</span>
+            <h3 className="text-lg font-bold text-text-primary">Generate QR & Link</h3>
+            <p className="text-xs text-text-secondary leading-relaxed">
+              Instantly receive a Base62 short URL and customizable vector PNG/SVG QR codes.
+            </p>
+          </div>
+          <div className="bg-surface border border-hairline p-6 rounded-2xl space-y-3">
+            <span className="font-mono text-xs font-bold text-accent uppercase tracking-widest">Step 03</span>
+            <h3 className="text-lg font-bold text-text-primary">Track Privacy Telemetry</h3>
+            <p className="text-xs text-text-secondary leading-relaxed">
+              Monitor click counts, geographic traffic breakdown, and device types with SHA-256 IP privacy.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Frequently Asked Questions (FAQ) Section */}
+      <section className="max-w-4xl mx-auto px-4 py-16 space-y-8 border-t border-hairline">
+        <div className="text-center space-y-2">
+          <h2 className="font-display text-3xl sm:text-4xl font-extrabold text-text-primary tracking-tight">
+            Frequently Asked Questions
+          </h2>
+          <p className="text-text-secondary text-sm">Everything you need to know about LinkGuard URL shortener.</p>
+        </div>
+
+        <div className="space-y-4">
+          {[
+            { q: "How does LinkGuard ensure sub-100ms redirection speed?", a: "LinkGuard utilizes a Redis 8 cache-aside architecture. Short link lookup requests resolve directly from memory in under 10ms with database fallback." },
+            { q: "Is visitor IP data kept private and GDPR compliant?", a: "Yes. Visitor IP addresses are immediately anonymized via SHA-256 hashing with a daily rotating salt key before analytics logging. No raw IPs are ever stored." },
+            { q: "Can I customize the background and foreground colors of QR codes?", a: "Yes. Our Dynamic QR Studio allows you to customize foreground/background hex colors and export in raster PNG or vector SVG formats." },
+            { q: "How does password protection work for short links?", a: "When password protection is enabled, visitors are prompted to enter a password before the 302 redirect unlocks the destination URL." },
+            { q: "Is there a limit on how many links I can create?", a: "Free accounts include 50 active short links with complete click analytics and custom QR code downloads." }
+          ].map((item, idx) => (
+            <div key={idx} className="bg-surface border border-hairline p-5 rounded-2xl space-y-2">
+              <h3 className="text-sm font-bold text-text-primary">{item.q}</h3>
+              <p className="text-xs text-text-secondary leading-relaxed">{item.a}</p>
+            </div>
+          ))}
         </div>
       </section>
 

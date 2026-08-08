@@ -33,23 +33,27 @@ export function AnalyticsPage() {
         <Icon className={`w-4 h-4 ${accentClass}`} strokeWidth={1.75} />
         <span>{title}</span>
       </h3>
-      <div className="space-y-1.5">
-        {Object.entries(data).map(([key, count]) => {
-          const total = Object.values(data).reduce((a, b) => a + b, 0) || 1;
-          const pct = Math.round((count / total) * 100);
-          return (
-            <div key={key} className="space-y-1">
-              <div className="flex justify-between items-center text-[11px]">
-                <span className="font-medium text-text-secondary">{key}</span>
-                <span className="font-mono font-bold text-text-primary">{count} <span className="text-text-tertiary font-normal">({pct}%)</span></span>
+      {!data || Object.keys(data).length === 0 ? (
+        <p className="text-xs text-text-tertiary font-medium py-3 text-center">No telemetry data recorded yet.</p>
+      ) : (
+        <div className="space-y-1.5">
+          {Object.entries(data).map(([key, count]) => {
+            const total = Object.values(data).reduce((a, b) => a + b, 0) || 1;
+            const pct = Math.round((count / total) * 100);
+            return (
+              <div key={key} className="space-y-1">
+                <div className="flex justify-between items-center text-[11px]">
+                  <span className="font-medium text-text-secondary">{key}</span>
+                  <span className="font-mono font-bold text-text-primary">{count} <span className="text-text-tertiary font-normal">({pct}%)</span></span>
+                </div>
+                <div className="h-1 bg-surface-2 rounded-full overflow-hidden">
+                  <div className="h-full bg-accent/60 rounded-full transition-all duration-500 ease-out-expo" style={{ width: `${pct}%` }} />
+                </div>
               </div>
-              <div className="h-1 bg-surface-2 rounded-full overflow-hidden">
-                <div className="h-full bg-accent/60 rounded-full transition-all duration-500 ease-out-expo" style={{ width: `${pct}%` }} />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 
@@ -83,12 +87,12 @@ export function AnalyticsPage() {
         <DistributionPanel
           title="Device Distribution"
           icon={Smartphone}
-          data={analytics?.devices || { Mobile: 65, Desktop: 30, Tablet: 5 }}
+          data={analytics?.devices && Object.keys(analytics.devices).length > 0 ? analytics.devices : null}
         />
         <DistributionPanel
           title="Browser Distribution"
           icon={Monitor}
-          data={analytics?.browsers || { Chrome: 55, Safari: 25, Firefox: 12, Edge: 8 }}
+          data={analytics?.browsers && Object.keys(analytics.browsers).length > 0 ? analytics.browsers : null}
         />
       </div>
     </div>

@@ -1,0 +1,8 @@
+# LinkGuard Platform
+Fast, secure URL shortener with real-time analytics, privacy protection (SHA-256 IP anonymization), and customizable QR code studio.
+
+## Core APIs
+- GET /{shortCode} - Resolves 302 Found redirect
+- POST /api/v1/urls - Creates short URL or custom slug
+- GET /api/v1/analytics/{id} - Returns click analytics and distribution
+- POST /api/v1/qr-codes - Generates custom PNG/SVG QR codes
