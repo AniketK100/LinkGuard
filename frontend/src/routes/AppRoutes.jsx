@@ -19,6 +19,7 @@ const RegisterPage = lazy(() => import('../pages/public/RegisterPage'));
 const PasswordVerifyPage = lazy(() => import('../pages/public/PasswordVerifyPage'));
 const PrivacyPage = lazy(() => import('../pages/public/PrivacyPage'));
 const TermsPage = lazy(() => import('../pages/public/TermsPage'));
+const ShortCodeRedirect = lazy(() => import('../pages/public/ShortCodeRedirect'));
 const NotFoundPage = lazy(() => import('../pages/public/NotFoundPage'));
 
 // User Pages (Lazy)
@@ -62,6 +63,7 @@ export function AppRoutes() {
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
           <Route path=":shortCode/verify" element={<PasswordVerifyPage />} />
+          <Route path=":shortCode" element={<ShortCodeRedirect />} />
         </Route>
 
         {/* User Dashboard Routes */}

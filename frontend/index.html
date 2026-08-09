@@ -114,88 +114,29 @@
   </head>
   <body class="bg-canvas text-text-primary antialiased min-h-screen font-sans">
     <div id="root">
-      <!-- SSR / SEO Human-Written Fallback HTML for Search Engines & AI Crawlers -->
+      <div style="min-height:100vh;background-color:#08090B;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">
+        <div style="text-align:center;">
+          <img src="/logo.svg" alt="LinkGuard Logo" width="48" height="48" style="margin:0 auto 16px;display:block;" />
+          <p style="font-size:14px;font-weight:600;letter-spacing:0.05em;color:#94A3B8;">LOADING LINKGUARD…</p>
+        </div>
+      </div>
+    </div>
+    <noscript>
       <header role="banner">
         <nav role="navigation" aria-label="Main Navigation">
-          <a href="/">
-            <img src="/logo.svg" alt="LinkGuard URL Shortener Logo" width="40" height="40" />
-            <span>LinkGuard</span>
-          </a>
-          <div>
-            <a href="/features">Features</a>
-            <a href="/pricing">Pricing</a>
-            <a href="/about">About Us</a>
-            <a href="/contact">Contact Support</a>
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms of Service</a>
-          </div>
+          <a href="/">LinkGuard URL Shortener</a>
+          <a href="/features">Features</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/about">About Us</a>
+          <a href="/contact">Contact Support</a>
         </nav>
       </header>
-
-      <main id="main-content" role="main">
-        <article>
-          <h1 id="main-heading">LinkGuard — Fast &amp; Secure URL Shortener</h1>
-          <p>
-            Shorten long web addresses, build custom branded links, export vector QR codes, and measure traffic with privacy-first click analytics.
-          </p>
-
-          <section>
-            <h2>Why Use LinkGuard for URL Management?</h2>
-            <p>
-              Many URL shorteners log raw IP addresses or add redirection delays. LinkGuard is built on three simple principles:
-            </p>
-            <ul>
-              <li><strong>Sub-10ms Lookup Times:</strong> In-memory Redis caching resolves destination links in milliseconds before hitting primary database storage.</li>
-              <li><strong>SHA-256 IP Privacy:</strong> IP addresses pass through a cryptographic hashing function before saving telemetry, keeping your click stats GDPR-compliant.</li>
-              <li><strong>Vector QR Code Generation:</strong> Download scalable SVG or PNG QR codes with customizable color schemes for digital and print marketing.</li>
-            </ul>
-          </section>
-
-          <section>
-            <h2>Core Features</h2>
-            <div>
-              <div>
-                <h3>Custom Alias Creation</h3>
-                <p>Choose custom short link slugs that match your brand identity instead of random letters.</p>
-              </div>
-              <div>
-                <h3>Password Lock</h3>
-                <p>Protect confidential target links with a required password prompt before redirecting visitors.</p>
-              </div>
-              <div>
-                <h3>Real-Time Analytics</h3>
-                <p>Track total clicks, referring websites, country location data, and device distribution graphs.</p>
-              </div>
-            </div>
-          </section>
-
-          <section>
-            <h2>Frequently Asked Questions</h2>
-            <div>
-              <h3>How fast does LinkGuard redirect links?</h3>
-              <p>LinkGuard uses Redis memory caching to resolve short links in under 10 milliseconds, ensuring visitors reach target destinations immediately without delay.</p>
-
-              <h3>How is visitor IP privacy protected?</h3>
-              <p>Every visitor IP address is transformed using SHA-256 cryptographic hashing with a daily secret salt before saving analytics. Raw IP addresses are never saved to disk.</p>
-
-              <h3>What image formats can I export for QR codes?</h3>
-              <p>You can generate and download QR codes in high-resolution vector SVG format or standard PNG raster format with custom foreground and background colors.</p>
-            </div>
-          </section>
-
-          <section>
-            <h2>Contact &amp; Customer Support</h2>
-            <p>
-              LinkGuard is maintained by the LinkGuard Engineering Team. If you have questions or need technical support, email us at <a href="mailto:support@linkguard.app">support@linkguard.app</a> or send a message through our <a href="/contact">Contact Page</a>.
-            </p>
-          </section>
-        </article>
+      <main role="main">
+        <h1>LinkGuard — Fast &amp; Secure URL Shortener</h1>
+        <p>Shorten long URLs, create custom branded links, export vector QR codes, and track real-time click analytics with SHA-256 IP privacy protection.</p>
+        <p>Contact: support@linkguard.app</p>
       </main>
-
-      <footer role="contentinfo">
-        <p>&copy; 2026 LinkGuard Platform Inc. All rights reserved. Maintained by LinkGuard Engineering Team.</p>
-      </footer>
-    </div>
+    </noscript>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
