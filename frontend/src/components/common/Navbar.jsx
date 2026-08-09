@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Shield, Search, LogOut, LayoutDashboard, Sun, Moon, Menu, X } from 'lucide-react';
+import { Shield, Search, LogOut, LayoutDashboard, Sun, Moon, Menu, X, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import CommandPalette from './CommandPalette';
+import Modal from './Modal';
+import Button from './Button';
 
 export function Navbar() {
   const { user, logout, isAdmin } = useAuth();
@@ -12,6 +14,7 @@ export function Navbar() {
   const location = useLocation();
   const [isCommandOpen, setIsCommandOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const isMarketing = ['/', '/features', '/pricing', '/about', '/contact', '/privacy', '/terms'].includes(location.pathname);
@@ -37,7 +40,11 @@ export function Navbar() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  const handleLogout = () => { logout(); navigate('/'); };
+  const confirmLogout = () => {
+    setShowLogoutModal(false);
+    logout();
+    navigate('/');
+  };
 
   return (
     <header role="banner" className={`sticky top-0 z-40 transition-all duration-200 ${
@@ -96,7 +103,7 @@ export function Navbar() {
                     <span className="hidden sm:inline">Dashboard</span>
                   </Link>
                   <button
-                    onClick={handleLogout}
+                    onClick={() => setShowLogoutModal(true)}
                     className="p-2.5 rounded-full text-text-tertiary hover:text-text-primary hover:bg-surface-2 border border-hairline transition-all duration-100"
                     title="Sign Out"
                     aria-label="Sign Out"
@@ -146,6 +153,27 @@ export function Navbar() {
         )}
       </nav>
       <CommandPalette isOpen={isCommandOpen} onClose={() => setIsCommandOpen(false)} />
+
+      {/* Themed Sign Out Confirmation Modal */}
+      <Modal isOpen={showLogoutModal} onClose={() => setShowLogoutModal(false)} title="Sign Out Confirmation">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-warning/10 border border-warning/20 flex-shrink-0">
+              <AlertCircle className="w-5 h-5 text-warning" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-text-primary">Are you sure you want to sign out?</p>
+              <p className="text-xs text-text-secondary">You will need to sign back in to manage your active short links and view telemetry analytics.</p>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="secondary" onClick={() => setShowLogoutModal(false)}>Cancel</Button>
+            <Button onClick={confirmLogout} className="bg-danger hover:bg-danger/90 text-white border-danger">
+              Sign Out
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </header>
   );
 }

@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 
+import org.springframework.data.redis.core.RedisTemplate;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -28,6 +30,7 @@ public class ClickEventListener {
     private final AnalyticsSummaryRepository analyticsSummaryRepository;
     private final UrlRepository urlRepository;
     private final IpAnonymizer ipAnonymizer;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     @Async
     @EventListener
@@ -75,6 +78,13 @@ public class ClickEventListener {
             summary.setUniqueClicks(uniqueClicks);
             summary.setLastAccessedAt(event.getTimestamp());
             analyticsSummaryRepository.save(summary);
+
+            // Evict analytics Redis cache so next dashboard query gets fresh counts
+            try {
+                redisTemplate.delete("linkguard:cache:analytics:" + event.getUrlId());
+            } catch (Exception ex) {
+                log.warn("Failed to evict Redis analytics cache for urlId {}: {}", event.getUrlId(), ex.getMessage());
+            }
 
             log.debug("Recorded click event for URL id {} shortCode {}", event.getUrlId(), event.getShortCode());
         } catch (Exception ex) {

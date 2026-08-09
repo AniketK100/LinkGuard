@@ -1,8 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, Copy, Check, Zap, BarChart3, Lock, QrCode, Shield } from 'lucide-react';
 import Button from '../../components/common/Button';
+import Modal from '../../components/common/Modal';
 import api from '../../lib/axios';
+import { ArrowRight, Copy, Check, Zap, BarChart3, Lock, QrCode, Shield, AlertCircle } from 'lucide-react';
 
 export function LandingPage() {
   const [url, setUrl] = useState('');
@@ -10,6 +11,7 @@ export function LandingPage() {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationModal, setValidationModal] = useState('');
   const statsRef = useRef(null);
   const [statsVisible, setStatsVisible] = useState(false);
 
@@ -26,14 +28,17 @@ export function LandingPage() {
     if (!url.trim()) return;
     setLoading(true);
     setError('');
+    setValidationModal('');
     try {
-      const response = await api.post('/api/v1/urls', { originalUrl: url });
+      const response = await api.post('/api/v1/urls', { originalUrl: url.trim() });
       if (response.data?.success) {
-        const backendBase = import.meta.env.VITE_API_BASE_URL || window.location.origin;
+        const backendBase = import.meta.env.VITE_API_BASE_URL || 'https://linkguard-flve.onrender.com';
         setShortUrl(backendBase + '/' + response.data.data.shortCode);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Failed to shorten URL.');
+      const msg = err.response?.data?.message || 'Validation failed for request fields';
+      setError(msg);
+      setValidationModal(msg);
     } finally {
       setLoading(false);
     }
@@ -259,6 +264,26 @@ export function LandingPage() {
           </Link>
         </div>
       </section>
+
+      {/* Themed Validation Pop Up Modal */}
+      <Modal isOpen={!!validationModal} onClose={() => setValidationModal('')} title="Validation Failed">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-danger/10 border border-danger/20 flex-shrink-0">
+              <AlertCircle className="w-5 h-5 text-danger" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-text-primary">Validation failed for request fields</p>
+              <p className="text-xs text-text-secondary">{validationModal}</p>
+            </div>
+          </div>
+          <div className="flex justify-end pt-2">
+            <Button onClick={() => setValidationModal('')} variant="primary">
+              OK
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

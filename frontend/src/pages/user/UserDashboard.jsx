@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link2, MousePointer, QrCode, Shield, Plus, Copy, Check, ExternalLink } from 'lucide-react';
+import { Link2, MousePointer, QrCode, Plus, Copy, Check, AlertCircle } from 'lucide-react';
 import StatCard from '../../components/common/StatCard';
 import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
@@ -14,6 +14,7 @@ export function UserDashboard() {
   const [customAlias, setCustomAlias] = useState('');
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState(null);
+  const [validationError, setValidationError] = useState('');
 
   useEffect(() => { fetchUrls(); }, []);
 
@@ -29,9 +30,10 @@ export function UserDashboard() {
   const handleCreateUrl = async (e) => {
     e.preventDefault();
     setCreating(true);
+    setValidationError('');
     try {
       await api.post('/api/v1/urls', {
-        originalUrl,
+        originalUrl: originalUrl.trim(),
         customAlias: customAlias.trim() || undefined,
       });
       setOriginalUrl('');
@@ -39,14 +41,16 @@ export function UserDashboard() {
       setCreateModalOpen(false);
       fetchUrls();
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to create short URL');
+      const msg = err.response?.data?.message || 'Validation failed for request fields';
+      setValidationError(msg);
     } finally {
       setCreating(false);
     }
   };
 
   const copyShortUrl = (shortCode, id) => {
-    navigator.clipboard.writeText(window.location.origin + '/' + shortCode);
+    const backendBase = import.meta.env.VITE_API_BASE_URL || 'https://linkguard-flve.onrender.com';
+    navigator.clipboard.writeText(backendBase + '/' + shortCode);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
@@ -121,7 +125,7 @@ export function UserDashboard() {
       </div>
 
       {/* Create Modal */}
-      <Modal isOpen={createModalOpen} onClose={() => setCreateModalOpen(false)} title="Create New Short Link">
+      <Modal isOpen={createModalOpen} onClose={() => { setCreateModalOpen(false); setValidationError(''); }} title="Create New Short Link">
         <form onSubmit={handleCreateUrl} className="space-y-4">
           <div className="space-y-1.5">
             <label className="text-[11px] font-semibold uppercase tracking-widest text-text-tertiary">Destination URL</label>
@@ -132,10 +136,30 @@ export function UserDashboard() {
             <input type="text" value={customAlias} onChange={(e) => setCustomAlias(e.target.value)} placeholder="my-custom-slug" className="w-full px-3 py-2.5 bg-canvas border border-hairline rounded-lg text-sm text-text-primary placeholder-text-tertiary focus:outline-none focus:border-accent/40 font-mono transition-colors duration-100" />
           </div>
           <div className="pt-2 flex justify-end gap-2">
-            <Button variant="secondary" onClick={() => setCreateModalOpen(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={() => { setCreateModalOpen(false); setValidationError(''); }}>Cancel</Button>
             <Button type="submit" disabled={creating}>{creating ? 'Creating…' : 'Create Link'}</Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Themed Validation Failed Pop Up */}
+      <Modal isOpen={!!validationError} onClose={() => setValidationError('')} title="Validation Failed">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-danger/10 border border-danger/20 flex-shrink-0">
+              <AlertCircle className="w-5 h-5 text-danger" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-text-primary">Validation failed for request fields</p>
+              <p className="text-xs text-text-secondary">{validationError}</p>
+            </div>
+          </div>
+          <div className="flex justify-end pt-2">
+            <Button onClick={() => setValidationError('')} variant="primary">
+              OK
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );
