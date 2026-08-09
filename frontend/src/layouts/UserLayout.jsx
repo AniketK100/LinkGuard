@@ -20,9 +20,9 @@ export function UserLayout() {
   return (
     <div className="min-h-screen bg-canvas text-text-primary flex flex-col font-sans">
       <Navbar />
-      <div className="flex-1 flex">
+      <div className="flex-1 flex flex-col md:flex-row">
         <Sidebar mode="user" />
-        <main className="flex-1 p-6 overflow-x-hidden">
+        <main className="flex-1 p-3 sm:p-5 md:p-6 overflow-x-hidden w-full">
           <Outlet />
         </main>
       </div>

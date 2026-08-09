@@ -46,6 +46,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     transition: background-color 150ms ease, color 150ms ease;
+    width: 100%;
   }
 
   body {
@@ -53,6 +54,9 @@
     color: rgb(var(--text-primary-rgb));
     font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
     transition: background-color 150ms ease, color 150ms ease;
+    width: 100%;
+    margin: 0;
+    padding: 0;
   }
 
   ::selection {
@@ -69,6 +73,8 @@
     background-color: rgb(var(--surface-2-rgb));
     color: rgb(var(--text-primary-rgb));
     border: 1px solid rgb(var(--hairline-rgb));
+    min-height: 40px;
+    touch-action: manipulation;
   }
 
   html.light input, html.light textarea, html.light select {
@@ -109,25 +115,138 @@
   html.light .bg-surface {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
+    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 4px -1px rgba(15, 23, 42, 0.03);
   }
 
   html.dark .bg-surface {
     background-color: #101114;
     border: 1px solid #26282D;
+    box-shadow: 0 4px 14px -2px rgba(0, 0, 0, 0.4);
   }
 }
 
 @layer components {
   .mono-pill {
-    @apply font-mono px-2.5 py-0.5 rounded-full text-[11px] font-semibold;
+    @apply font-mono px-2.5 py-0.5 rounded-full text-[11px] font-semibold inline-flex items-center;
     color: rgb(var(--text-primary-rgb));
     background-color: rgb(var(--surface-2-rgb));
     border: 1px solid rgb(var(--hairline-rgb));
+    word-break: break-all;
   }
 
   .skeleton {
     background-color: rgb(var(--surface-2-rgb));
     @apply rounded-md animate-pulse-soft;
   }
+
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* Thin Modern Scrollbar across whole site */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+
+html.dark ::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(99, 102, 241, 0.6);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+html.dark * {
+  scrollbar-color: rgba(255, 255, 255, 0.15) transparent;
+}
+
+@keyframes themeSpread {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+    opacity: 0.95;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(2);
+    opacity: 0;
+  }
+}
+
+/* Enhanced 3D Lift Elevation & Shadow Effects */
+.bg-surface, button, .card-hover, input, select {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease;
+}
+
+.bg-surface:hover, .card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 30px -4px rgba(0, 0, 0, 0.1), 0 8px 12px -4px rgba(0, 0, 0, 0.05);
+}
+
+html.dark .bg-surface:hover, html.dark .card-hover:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 36px -4px rgba(0, 0, 0, 0.75), 0 0 20px -2px rgba(99, 102, 241, 0.25);
+  border-color: rgba(99, 102, 241, 0.45);
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.16);
+}
+
+html.dark button:hover:not(:disabled) {
+  box-shadow: 0 8px 22px -4px rgba(0, 0, 0, 0.6), 0 0 12px -1px rgba(255, 255, 255, 0.15);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0.5px);
+  box-shadow: 0 2px 6px -1px rgba(0, 0, 0, 0.15);
+}
+
+/* Header & Footer 3D Float Shadows */
+header {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  width: 100% !important;
+  z-index: 1000 !important;
+  box-shadow: 0 6px 24px -2px rgba(0, 0, 0, 0.08);
+}
+
+html.dark header {
+  box-shadow: 0 6px 28px -2px rgba(0, 0, 0, 0.55);
+}
+
+footer {
+  box-shadow: 0 -6px 24px -2px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.25s ease;
+}
+
+html.dark footer {
+  box-shadow: 0 -6px 28px -2px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive table text wrapping & code breaks */
+table th, table td {
+  word-break: break-word;
+  overflow-wrap: anywhere;
 }

@@ -1,4 +1,4 @@
-# LinkGuard — Security & Compliance Specification 🛡️
+# LinkGuard — Security & Compliance Policy 🛡️
 
 LinkGuard is designed with defense-in-depth security, strict privacy compliance, and threat mitigation mechanisms across both backend services and frontend applications.
 
@@ -61,7 +61,7 @@ Every HTTP response emitted by LinkGuard includes the following hardened securit
 
 ## 📢 Reporting Security Vulnerabilities
 
-If you discover a potential security vulnerability in LinkGuard, please do **NOT** create a public GitHub issue. Instead, report it directly to the engineering team:
+If you discover a potential security vulnerability in LinkGuard, report it directly to the engineering team:
 
 - **Security Email**: `security@linkguard.app`
 - **Response SLA**: Vulnerability reports are acknowledged within 24 hours.

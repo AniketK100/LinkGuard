@@ -73,22 +73,22 @@ export function LandingPage() {
           </p>
 
           {/* Live shortener - Pill Input Form */}
-          <div className="bg-surface border border-hairline p-3 sm:p-4 rounded-full max-w-2xl w-full mx-auto text-left relative z-10 shadow-md">
-            <form onSubmit={handleShorten} className="flex items-center gap-3">
+          <div className="bg-surface border border-hairline p-2 sm:p-3.5 rounded-2xl sm:rounded-full max-w-2xl w-full mx-auto text-left relative z-10 shadow-md">
+            <form onSubmit={handleShorten} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3">
               <input
                 type="url"
                 placeholder="Paste a long URL to shorten…"
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 required
-                className="flex-1 px-5 py-3 bg-transparent border-0 text-text-primary placeholder-text-tertiary focus:outline-none text-sm sm:text-base font-mono"
+                className="flex-1 px-4 sm:px-5 py-2.5 sm:py-3 bg-transparent border-0 text-text-primary placeholder-text-tertiary focus:outline-none text-xs sm:text-base font-mono w-full min-w-0"
               />
-              <Button type="submit" disabled={loading} icon={ArrowRight} size="lg" className="rounded-full flex-shrink-0">
+              <Button type="submit" disabled={loading} icon={ArrowRight} size="lg" className="rounded-xl sm:rounded-full flex-shrink-0 w-full sm:w-auto justify-center">
                 {loading ? 'Shortening…' : 'Shorten'}
               </Button>
             </form>
 
-            {error && <p className="text-xs text-red-500 font-medium px-6 pt-2">{error}</p>}
+            {error && <p className="text-xs text-red-500 font-medium px-4 sm:px-6 pt-2">{error}</p>}
           </div>
 
           {shortUrl && (

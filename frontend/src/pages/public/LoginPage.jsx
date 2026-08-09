@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { Shield, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
 
 export function LoginPage() {
+  const { user, login, isAdmin } = useAuth();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPass, setShowPass] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const { login } = useAuth();
   const navigate = useNavigate();
+
+  if (user) {
+    return <Navigate to={isAdmin ? '/admin/dashboard' : '/dashboard'} replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

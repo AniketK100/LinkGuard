@@ -1,8 +1,8 @@
 import React from 'react';
-import AdminDashboard from './AdminDashboard';
+import AdminAnalyticsPage from './AdminAnalyticsPage';
 
 export function AdminReportsPage() {
-  return <AdminDashboard />;
+  return <AdminAnalyticsPage />;
 }
 
 export default AdminReportsPage;

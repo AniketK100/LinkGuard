@@ -47,8 +47,8 @@ export function Navbar() {
   };
 
   return (
-    <header role="banner" className={`sticky top-0 z-40 transition-all duration-200 ${
-      scrolled ? 'glass border-b border-hairline' : 'bg-canvas border-b border-hairline'
+    <header role="banner" className={`fixed top-0 left-0 right-0 w-full z-[1000] transition-all duration-200 ${
+      scrolled ? 'glass border-b border-hairline shadow-md' : 'bg-canvas border-b border-hairline'
     }`}>
       <nav role="navigation" aria-label="Main Navigation">
         <div className="max-w-[92rem] mx-auto px-6 sm:px-10 lg:px-16 h-18 sm:h-20 flex items-center justify-between gap-4">
@@ -94,17 +94,23 @@ export function Navbar() {
               </button>
 
               {user ? (
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 sm:gap-2.5">
                   <Link
                     to={isAdmin ? '/admin/dashboard' : '/dashboard'}
-                    className="flex items-center gap-2 px-4 sm:px-5 py-2.5 rounded-full bg-text-primary text-canvas text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all duration-100 shadow-sm"
+                    className="flex items-center gap-2 px-4 py-2.5 rounded-full bg-text-primary text-canvas text-xs font-extrabold uppercase tracking-wider hover:opacity-90 transition-all duration-100 shadow-sm"
                   >
                     <LayoutDashboard className="w-3.5 h-3.5" />
                     <span className="hidden sm:inline">Dashboard</span>
                   </Link>
+
+                  <div className="hidden sm:flex items-center gap-2 px-3.5 py-2 bg-surface-2 border border-hairline rounded-full text-xs font-semibold text-text-primary shadow-xs">
+                    <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="truncate max-w-[130px] font-mono">{user.name || user.email?.split('@')[0]}</span>
+                  </div>
+
                   <button
                     onClick={() => setShowLogoutModal(true)}
-                    className="p-2.5 rounded-full text-text-tertiary hover:text-text-primary hover:bg-surface-2 border border-hairline transition-all duration-100"
+                    className="w-9 h-9 rounded-full bg-surface-2 border border-hairline text-text-secondary hover:text-text-primary hover:bg-surface-2/80 transition-colors duration-100 flex items-center justify-center cursor-pointer shadow-xs"
                     title="Sign Out"
                     aria-label="Sign Out"
                   >

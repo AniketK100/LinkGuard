@@ -1,122 +1,166 @@
-# LinkGuard 🛡️
+# LinkGuard - URL shortening with real-time analytics
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Java-21-orange?style=for-the-badge&logo=openjdk" alt="Java 21" />
-  <img src="https://img.shields.io/badge/Spring_Boot-3.4.2-brightgreen?style=for-the-badge&logo=springboot" alt="Spring Boot 3.4" />
-  <img src="https://img.shields.io/badge/Redis-8.0-red?style=for-the-badge&logo=redis" alt="Redis 8" />
-  <img src="https://img.shields.io/badge/PostgreSQL-18-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL 18" />
-  <img src="https://img.shields.io/badge/React-19.0-61DAFB?style=for-the-badge&logo=react" alt="React 19" />
-  <img src="https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?style=for-the-badge&logo=tailwind-css" alt="Tailwind CSS" />
-  <img src="https://img.shields.io/badge/Docker-Enabled-2496ED?style=for-the-badge&logo=docker" alt="Docker" />
-</p>
+![Java](https://img.shields.io/badge/JAVA-21-orange?style=for-the-badge&logo=openjdk)
+![Spring Boot](https://img.shields.io/badge/SPRING_BOOT-3.4.2-brightgreen?style=for-the-badge&logo=springboot)
+![Redis](https://img.shields.io/badge/REDIS-8.0-red?style=for-the-badge&logo=redis)
+![PostgreSQL](https://img.shields.io/badge/POSTGRESQL-18-blue?style=for-the-badge&logo=postgresql)
+![React](https://img.shields.io/badge/REACT-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
+![Tailwind CSS](https://img.shields.io/badge/TAILWIND_CSS-3.4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![Docker](https://img.shields.io/badge/DOCKER-ENABLED-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
-**Intelligent URL Shortening, Real-Time Analytics & Security Control Room**
-
-LinkGuard is an enterprise-grade URL management platform designed for speed, privacy, and full traffic visibility. It features a sub-100ms redirection engine, custom QR code generation, real-time visitor telemetry with SHA-256 IP anonymization, and comprehensive admin security controls.
+![LinkGuard Platform](frontend/public/og-image.png)
 
 ---
 
-## ⚡ System Architecture & Workflow
+## ⚡ Overview
+
+**LinkGuard** is a enterprise-grade, high-performance URL shortener built for speed, privacy, and real-time analytics. Powered by a **Redis Cache-Aside Architecture** and **Spring Boot 3.4**, LinkGuard resolves short links in **<10ms** while logging telemetry data safely with **SHA-256 IP anonymization**.
+
+---
+
+## 🏗️ System Architecture & Workflow
+
+LinkGuard utilizes a dual-tier storage strategy combining ultra-low-latency in-memory cache (**Upstash / Redis 8**) with ACID-compliant persistent storage (**Neon / PostgreSQL 18**).
 
 ```mermaid
 flowchart TD
-    Client[User Browser / Mobile Device] -->|HTTPS Request| Nginx[Nginx Reverse Proxy / Port 80]
-    Nginx -->|Route Request| Frontend[React 19 SPA / Port 3000]
-    Nginx -->|API & Shortcode Redirects| Backend[Spring Boot 3.4 API / Port 8080]
+    Client[🌐 Client / Browser] -->|GET /:shortCode| RedirectionController[⚡ Spring Boot Controller]
     
-    subgraph "Backend Engine (Java 21)"
-        Backend --> CacheCheck{Redis Cache Hit?}
-        CacheCheck -->|Yes - Sub 10ms| ReturnURL[Return Original Target URL]
-        CacheCheck -->|No| DBCheck[Query PostgreSQL 18 DB]
-        DBCheck --> PopulateCache[Write Back to Redis Cache]
-        PopulateCache --> ReturnURL
+    subgraph Storage Tier
+        RedirectionController -->|1. Cache Lookup| Redis[(🔴 Redis 8.0 Memory Cache)]
+        Redis -->|Hit <10ms| FastReturn[🚀 302 Found Redirect]
         
-        Backend --> AsyncTelemetry[Async Event Listener]
-        AsyncTelemetry --> Anonymize[SHA-256 IP Anonymizer & GeoIP]
-        Anonymize --> SaveTelemetry[(PostgreSQL Telemetry DB)]
+        Redis -.->|Miss| Postgres[(🐘 PostgreSQL 18 DB)]
+        Postgres -->|Populate Cache| Redis
+        Postgres -->|Return Entity| RedirectionController
     end
-    
-    ReturnURL -->|302 Redirect| Target[Destination Website]
+
+    subgraph Privacy & Telemetry Tier
+        RedirectionController -->|2. Asynchronous Click Event| AnalyticsService[📊 Analytics Pipeline]
+        AnalyticsService -->|SHA-256 Salted Hash| Anonymizer[🔒 IP Anonymizer]
+        Anonymizer -->|Save Click Log| ClickDB[(📊 Analytics Table)]
+    end
+```
+
+### 🔁 End-to-End Workflow
+
+1. **Short Link Resolution**:
+   - Visitor requests `http://localhost:3000/drive` or `https://linkguard.app/drive`.
+   - Backend queries **Redis In-Memory Cache**.
+   - **Cache Hit**: Instant `302 Found` HTTP redirect in **<10ms**.
+   - **Cache Miss**: Fallback to **PostgreSQL**, populate Redis cache asynchronously, and redirect visitor.
+
+2. **Privacy-Preserving Telemetry**:
+   - Visitor IP is hashed using **SHA-256** with a daily rotating salt key before persistence.
+   - Raw IP addresses are **never written to disk or database tables**.
+
+3. **Base62 Encoding**:
+   - High-throughput Base62 generator converts sequential auto-increment identifiers to compact, collision-free short slugs.
+
+---
+
+## ✨ Features & Component Breakdown
+
+### 🎯 Public Portal
+- **Hero Command Bar**: Instant short link generation with instant one-click copying.
+- **Dynamic 404 Resolution**: Theme-matched 404 page integrated directly into public routing.
+- **Aesthetic Redirect Screen**: High-craft animated redirection telemetry screen with live status pings.
+
+### 👤 User Dashboard (`/dashboard/*`)
+- **Link Directory**: Interactive data table for inspecting, disabling, enabling, and deleting short links.
+- **Real-Time Analytics Studio**: View click distribution by country, device type, browser, and referral source.
+- **Dynamic QR Code Studio**: Instant offline client-side vector (`SVG`) and raster (`PNG`) QR code generator with live color customizer.
+- **Workspace Settings**: Accessible high-contrast appearance toggle and notification preferences.
+
+### 🛡️ Admin Portal (`/admin/*`)
+- **Global Link Moderation**: Searchable directory for filtering links by target domain, short code, or keywords.
+- **User Management**: Instant search filter for user emails or display names with quick refresh.
+- **Security & Audit Logs**: Detailed system audit trail and threat detection metrics.
+
+---
+
+## 📁 Repository Structure
+
+```
+LinkGuard/
+├── backend/                  # Spring Boot 3.4.2 REST API
+│   ├── src/main/java/app/linkguard/
+│   │   ├── config/           # Security, CORS, Redis & OpenAPI Config
+│   │   ├── controller/       # REST API Endpoints & Redirect Controllers
+│   │   ├── dto/              # Data Transfer Objects
+│   │   ├── model/            # JPA Entities (User, Url, ClickLog, Audit)
+│   │   ├── repository/       # PostgreSQL Repositories
+│   │   ├── security/         # JWT Filters & RBAC Password Encoders
+│   │   └── service/          # Core Business Logic & Base62 Generator
+│   └── pom.xml               # Maven Project POM
+├── frontend/                 # React 19 + Vite + Tailwind CSS Application
+│   ├── public/               # Static Assets (og-image.png, favicon.svg)
+│   ├── src/
+│   │   ├── components/       # Reusable UI Components (Navbar, Footer, Modal, Button)
+│   │   ├── context/          # Theme & Auth React Context Providers
+│   │   ├── layouts/          # Public, User Dashboard & Admin Layouts
+│   │   ├── pages/            # Public, User & Admin Page Views
+│   │   └── routes/           # AppRoutes Central Router
+│   ├── package.json          # Dependencies (qrcode, lucide-react, react-router-dom)
+│   └── vite.config.js        # Vite Config with Dev Server Proxy (Port 3000 -> 8080)
+├── docker-compose.yml        # Docker Orchestration Configuration
+├── .env.example              # Environment Variable Template
+├── SECURITY.md               # Security & Compliance Policy
+└── README.md                 # Technical Documentation
 ```
 
 ---
 
-## 🛠️ Technology Stack
+## ⚡ Quick Start & Installation
 
-| Layer | Component | Version | Description |
-| :--- | :--- | :--- | :--- |
-| **Backend Core** | Java JDK | 21 LTS | High-performance Java runtime |
-| **Framework** | Spring Boot | 3.4.2 | REST APIs, Spring Security, Spring Data JPA, Actuator |
-| **OpenAPI** | Springdoc OpenAPI | 2.8.5 | Swagger UI interactive documentation |
-| **Caching Layer** | Redis | 8.0 | Cache-aside redirection engine and rate limiting |
-| **Database** | PostgreSQL | 18 | Persistent storage with Flyway database migration scripts |
-| **Frontend UI** | React | 19.0.0 | Fast SPA rendering with React Router 7 and TanStack Query |
-| **Styling** | Tailwind CSS | 3.4.17 | Semantic token system with Dark/Light mode support |
-| **Containerization**| Docker Compose | 3.8 | Multi-container environment with Nginx proxy |
+### Prerequisites
+- **Java 21 JDK**
+- **Node.js 18+ & npm**
+- **PostgreSQL 15+** (or Neon PostgreSQL)
+- **Redis 7+** (or Upstash Redis)
 
----
+### 1. Backend Setup
 
-## 🔒 Hardened Security Features
-
-- **SHA-256 IP Anonymization**: All visitor telemetry IP addresses are cryptographically hashed using a daily salt before storage (GDPR compliant).
-- **Hardened Spring Security**: Explicit route authorization (`anyRequest().authenticated()`), Content Security Policy, X-Frame-Options DENY, and Referrer Policy headers.
-- **Role-Based Access Control**: Strict segregation between `ROLE_USER` workspace and `ROLE_ADMIN` threat control center.
-- **Dynamic CORS Controls**: Configurable allowed origins driven by `CORS_ORIGINS` environment variables.
-
----
-
-## 📋 Primary API Endpoints
-
-| Method | Endpoint | Access | Description |
-| :--- | :--- | :--- | :--- |
-| `POST` | `/api/auth/register` | Public | Register new user account |
-| `POST` | `/api/auth/login` | Public | Authenticate user and issue JWT token |
-| `POST` | `/api/v1/urls` | Public/User | Create short link or custom slug |
-| `GET` | `/api/v1/urls` | Authenticated | List user's active short links (paginated) |
-| `GET` | `/{shortCode}` | Public | Execute 302 redirect to target URL |
-| `POST` | `/{shortCode}/verify` | Public | Verify password for protected links |
-| `GET` | `/api/v1/analytics/{urlId}` | Authenticated | Get detailed traffic analytics for a link |
-| `GET` | `/api/v1/admin/dashboard` | Admin | Platform metrics and security event logs |
-| `GET` | `/actuator/health` | Public | Infrastructure health status check |
-
----
-
-## ⚙️ Environment Configuration
-
-Copy `.env.example` to `.env` and configure key secrets:
-
-```env
-PORT=8080
-DB_HOST=localhost
-DB_PORT=5432
-DB_NAME=linkguard_db
-DB_USER=linkguard_user
-DB_PASSWORD=your_password
-REDIS_HOST=localhost
-REDIS_PORT=6379
-JWT_SECRET=your_secure_256_bit_jwt_secret_key
-CORS_ORIGINS=http://localhost:3000,http://localhost:5173
-```
-
----
-
-## 🚀 Local Setup & Verification
-
-### 1. Backend Build & Test
 ```bash
+# Navigate to backend directory
 cd backend
-mvn clean test
-```
 
-### 2. Frontend Build & Test
+# Configure environment variables (or set in application-dev.yml)
+cp ../.env.example .env
+
+# Compile and run Spring Boot server
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+*Backend runs on `http://localhost:8080`.*
+
+### 2. Frontend Setup
+
 ```bash
+# Navigate to frontend directory
 cd frontend
+
+# Install Node dependencies
 npm install
+
+# Start Vite dev server
+npm run dev
+```
+*Frontend runs on `http://localhost:3000`.*
+
+---
+
+## 🧪 Production Verification
+
+Verify production build stability:
+
+```bash
+# Build production bundle
+cd frontend
 npm run build
 ```
 
 ---
 
-## 📄 License
+## 📄 License & Security
 
-Released under the **MIT License**. Built with Java 21, Spring Boot 3.4, and React 19.
+This project is licensed under the MIT License. For security disclosures, refer to [SECURITY.md](SECURITY.md).

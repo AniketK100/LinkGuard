@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { Shield, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
 
 export function RegisterPage() {
+  const { user, register, isAdmin } = useAuth();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -12,7 +13,10 @@ export function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const { register } = useAuth();
+
+  if (user) {
+    return <Navigate to={isAdmin ? '/admin/dashboard' : '/dashboard'} replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();

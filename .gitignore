@@ -1,42 +1,46 @@
 # Environment & Secrets
 .env
 .env.local
+.env.production
 *.env
 *.pem
 *.key
 
-# IDE & Editor files
+# Temporary AI & Agent Caches
+.tempmediaStorage/
+.gemini/
+.brain/
+
+# IDE & OS Files
 .idea/
 .vscode/
 *.swp
 *.swo
-.ds_store
+.DS_Store
 Thumbs.db
+
+# Logs
+*.log
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # Java & Maven (Backend)
 target/
 backend/target/
-backend/.mvn/
-backend/mvnw
-backend/mvnw.cmd
 *.class
 *.jar
 *.war
 *.ear
 
 # Node & Frontend
+node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/build/
 frontend/.cache/
 frontend/.vite/
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
-# Docker
+# Docker Volumes
 docker/data/
-
-# OS specific
-.DS_Store

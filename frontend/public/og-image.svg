@@ -1,13 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <!-- Background -->
   <rect width="1200" height="630" fill="#08090B"/>
-  <rect x="60" y="60" width="1080" height="510" rx="32" fill="#0F1117" stroke="#1F2430" stroke-width="4"/>
-  <g transform="translate(120, 160)">
-    <rect width="96" height="96" rx="24" fill="#3B82F6"/>
-    <path d="M48 20L76 32V52C76 70 64 85 48 90C32 85 20 70 20 52V32L48 20Z" fill="#3B82F6" stroke="#FFFFFF" stroke-width="4"/>
-    <path d="M41 51L46 56L55 47" stroke="#FFFFFF" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Subtle Ambient Glow -->
+  <circle cx="600" cy="315" r="400" fill="#6366F1" opacity="0.08"/>
+  
+  <!-- Card Container -->
+  <rect x="60" y="60" width="1080" height="510" rx="32" fill="#101114" stroke="#26282D" stroke-width="3"/>
+  
+  <!-- Brand Header -->
+  <g transform="translate(120, 130)">
+    <!-- Brand Shield Box -->
+    <rect width="72" height="72" rx="20" fill="#F5F6F7"/>
+    <path d="M36 18L56 27V43C56 57 47 68 36 72C25 68 16 57 16 43V27L36 18Z" fill="#08090B"/>
+    <path d="M30 42L34 46L43 37" stroke="#F5F6F7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    
+    <!-- Title & Tagline -->
+    <text x="96" y="44" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="42" font-weight="800" letter-spacing="-1">LinkGuard</text>
+    <text x="96" y="68" fill="#9A9DA6" font-family="Plus Jakarta Sans, sans-serif" font-size="18" font-weight="600" letter-spacing="1">PRIVACY-FIRST LINK PLATFORM</text>
   </g>
-  <text x="240" y="215" fill="#FFFFFF" font-family="Plus Jakarta Sans, sans-serif" font-size="48" font-weight="800">LinkGuard</text>
-  <text x="240" y="255" fill="#94A3B8" font-family="Plus Jakarta Sans, sans-serif" font-size="22" font-weight="500">Secure URL Shortener &amp; Real-Time Link Analytics</text>
-  <text x="120" y="380" fill="#E2E8F0" font-family="Outfit, sans-serif" font-size="56" font-weight="800">Control room for your links.</text>
-  <text x="120" y="440" fill="#64748B" font-family="Plus Jakarta Sans, sans-serif" font-size="24">Sub-100ms Redirection • SHA-256 IP Privacy • Custom Vector QR Codes</text>
+  
+  <!-- Hero Heading -->
+  <text x="120" y="320" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="54" font-weight="800" letter-spacing="-1.5">Control room for your links.</text>
+  <text x="120" y="380" fill="#9A9DA6" font-family="Plus Jakarta Sans, sans-serif" font-size="24" font-weight="500">Fast, secure URL shortener with real-time analytics &amp; custom QR codes.</text>
+  
+  <!-- Feature Badges Bar -->
+  <g transform="translate(120, 440)">
+    <!-- Pill 1 -->
+    <rect x="0" y="0" width="180" height="44" rx="22" fill="#18181B" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="24" cy="22" r="4" fill="#10B981"/>
+    <text x="38" y="27" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">&lt;100ms Speed</text>
+
+    <!-- Pill 2 -->
+    <rect x="196" y="0" width="195" height="44" rx="22" fill="#18181B" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="220" cy="22" r="4" fill="#6366F1"/>
+    <text x="234" y="27" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">SHA-256 Privacy</text>
+
+    <!-- Pill 3 -->
+    <rect x="407" y="0" width="200" height="44" rx="22" fill="#18181B" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="431" cy="22" r="4" fill="#F59E0B"/>
+    <text x="445" y="27" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">Vector QR Studio</text>
+  </g>
 </svg>
