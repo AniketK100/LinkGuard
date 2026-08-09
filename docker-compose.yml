@@ -39,8 +39,8 @@ services:
 
   backend:
     build:
-      context: ./backend
-      dockerfile: ../docker/Dockerfile.backend
+      context: .
+      dockerfile: docker/Dockerfile.backend
     container_name: linkguard-backend
     restart: always
     ports:
@@ -74,8 +74,8 @@ services:
 
   frontend:
     build:
-      context: ./frontend
-      dockerfile: ../docker/Dockerfile.frontend
+      context: .
+      dockerfile: docker/Dockerfile.frontend
     container_name: linkguard-frontend
     restart: always
     ports:
