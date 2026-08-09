@@ -29,7 +29,8 @@ export function LandingPage() {
     try {
       const response = await api.post('/api/v1/urls', { originalUrl: url });
       if (response.data?.success) {
-        setShortUrl(window.location.origin + '/' + response.data.data.shortCode);
+        const backendBase = import.meta.env.VITE_API_BASE_URL || window.location.origin;
+        setShortUrl(backendBase + '/' + response.data.data.shortCode);
       }
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to shorten URL.');
