@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Trash2, Power, Copy, Check, Lock } from 'lucide-react';
+import { Search, Trash2, Power, Copy, Check, Lock, AlertTriangle } from 'lucide-react';
 import Badge from '../../components/common/Badge';
+import Button from '../../components/common/Button';
+import Modal from '../../components/common/Modal';
 import api from '../../lib/axios';
 
 export function UrlManagementPage() {
@@ -8,6 +10,8 @@ export function UrlManagementPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [copiedId, setCopiedId] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
+  const [deleting, setDeleting] = useState(false);
 
   useEffect(() => { fetchUrls(); }, []);
 
@@ -19,17 +23,42 @@ export function UrlManagementPage() {
   };
 
   const handleToggleStatus = async (id, currentStatus) => {
+    // Optimistic update — flip status in UI immediately
+    setUrls((prev) =>
+      prev.map((u) =>
+        u.id === id ? { ...u, status: currentStatus === 'ACTIVE' ? 'DISABLED' : 'ACTIVE' } : u
+      )
+    );
     const endpoint = currentStatus === 'ACTIVE' ? `/api/v1/urls/${id}/disable` : `/api/v1/urls/${id}/enable`;
-    try { await api.patch(endpoint); fetchUrls(); } catch { alert('Failed to update status'); }
+    try {
+      await api.patch(endpoint);
+    } catch {
+      // Revert on failure
+      setUrls((prev) =>
+        prev.map((u) =>
+          u.id === id ? { ...u, status: currentStatus } : u
+        )
+      );
+    }
   };
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this short URL?')) return;
-    try { await api.delete(`/api/v1/urls/${id}`); fetchUrls(); } catch { alert('Failed to delete URL'); }
+  const handleDelete = async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await api.delete(`/api/v1/urls/${deleteTarget}`);
+      setUrls((prev) => prev.filter((u) => u.id !== deleteTarget));
+    } catch {
+      alert('Failed to delete URL');
+    } finally {
+      setDeleting(false);
+      setDeleteTarget(null);
+    }
   };
 
   const copyShortUrl = (shortCode, id) => {
-    navigator.clipboard.writeText(window.location.origin + '/' + shortCode);
+    const backendBase = import.meta.env.VITE_API_BASE_URL || window.location.origin;
+    navigator.clipboard.writeText(backendBase + '/' + shortCode);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
   };
@@ -40,7 +69,7 @@ export function UrlManagementPage() {
   );
 
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="space-y-6 w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-lg font-bold text-text-primary">Link Directory</h1>
@@ -102,7 +131,7 @@ export function UrlManagementPage() {
                         <button onClick={() => handleToggleStatus(u.id, u.status)} className="p-1.5 rounded-md text-text-tertiary hover:text-warning hover:bg-warning/5 transition-colors duration-100" title="Toggle">
                           <Power className="w-3.5 h-3.5" />
                         </button>
-                        <button onClick={() => handleDelete(u.id)} className="p-1.5 rounded-md text-text-tertiary hover:text-danger hover:bg-danger/5 transition-colors duration-100" title="Delete">
+                        <button onClick={() => setDeleteTarget(u.id)} className="p-1.5 rounded-md text-text-tertiary hover:text-danger hover:bg-danger/5 transition-colors duration-100" title="Delete">
                           <Trash2 className="w-3.5 h-3.5" />
                         </button>
                       </div>
@@ -114,6 +143,27 @@ export function UrlManagementPage() {
           </div>
         )}
       </div>
+
+      {/* Themed Delete Confirmation Modal */}
+      <Modal isOpen={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Delete Short URL">
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="p-2 rounded-lg bg-danger/10 border border-danger/20 flex-shrink-0">
+              <AlertTriangle className="w-5 h-5 text-danger" />
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm font-semibold text-text-primary">Delete this short URL?</p>
+              <p className="text-xs text-text-secondary">This action cannot be undone. All click analytics for this link will also be permanently removed.</p>
+            </div>
+          </div>
+          <div className="flex justify-end gap-2 pt-2">
+            <Button variant="secondary" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+            <Button onClick={handleDelete} disabled={deleting} className="bg-danger hover:bg-danger/90 text-white border-danger">
+              {deleting ? 'Deleting…' : 'Delete'}
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </div>
   );
 }

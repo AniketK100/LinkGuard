@@ -54,7 +54,7 @@ export function UserDashboard() {
   const totalClicks = urls.reduce((sum, u) => sum + (u.clickCount || 0), 0);
 
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="space-y-6 w-full">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -65,11 +65,10 @@ export function UserDashboard() {
       </div>
 
       {/* KPI row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
         <StatCard title="Total Links" value={urls.length} icon={Link2} />
         <StatCard title="Total Clicks" value={totalClicks} icon={MousePointer} />
         <StatCard title="Active QR Codes" value={urls.length} icon={QrCode} />
-        <StatCard title="Security Mode" value="SHA-256" icon={Shield} />
       </div>
 
       {/* Data table */}

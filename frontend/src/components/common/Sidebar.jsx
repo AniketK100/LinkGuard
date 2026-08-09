@@ -28,7 +28,7 @@ export function Sidebar({ mode = 'user' }) {
   const links = mode === 'admin' ? adminLinks : userLinks;
 
   return (
-    <aside className="w-52 bg-surface border-r border-hairline min-h-[calc(100vh-3.5rem)] py-4 px-2 flex flex-col justify-between flex-shrink-0">
+    <aside className="w-52 bg-surface border-r border-hairline sticky top-14 h-[calc(100vh-3.5rem)] py-4 px-2 flex flex-col justify-between flex-shrink-0 overflow-y-auto">
       <div className="space-y-1">
         <div className="px-3 mb-3 text-[10px] font-semibold uppercase tracking-widest text-text-tertiary">
           {mode === 'admin' ? 'Administration' : 'Workspace'}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BarChart3, Globe, Smartphone, Monitor, Shield } from 'lucide-react';
+import { BarChart3, Globe, Smartphone, Monitor } from 'lucide-react';
 import StatCard from '../../components/common/StatCard';
 import api from '../../lib/axios';
 
@@ -58,29 +58,33 @@ export function AnalyticsPage() {
   );
 
   return (
-    <div className="space-y-6 max-w-6xl">
+    <div className="space-y-6 w-full">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-lg font-bold text-text-primary">Link Analytics</h1>
           <p className="text-xs text-text-tertiary mt-0.5">Track visitor traffic, device types, and browser distribution.</p>
         </div>
         {urls.length > 0 && (
-          <select
-            value={selectedUrlId}
-            onChange={(e) => setSelectedUrlId(e.target.value)}
-            className="px-3 py-2 bg-surface border border-hairline rounded-lg text-xs font-mono font-semibold text-text-primary focus:outline-none focus:border-accent/40 transition-colors duration-100"
-          >
-            {urls.map((u) => (
-              <option key={u.id} value={u.id}>/{u.shortCode} — {u.originalUrl.substring(0, 30)}…</option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={selectedUrlId}
+              onChange={(e) => setSelectedUrlId(e.target.value)}
+              className="appearance-none px-4 pr-8 py-2 bg-surface border border-hairline rounded-lg text-xs font-mono font-semibold text-text-primary focus:outline-none focus:border-accent/40 transition-colors duration-100 cursor-pointer"
+            >
+              {urls.map((u) => (
+                <option key={u.id} value={u.id} className="bg-surface text-text-primary">/{u.shortCode} — {u.originalUrl.substring(0, 30)}…</option>
+              ))}
+            </select>
+            <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+              <svg className="w-3.5 h-3.5 text-text-tertiary" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
+            </div>
+          </div>
         )}
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         <StatCard title="Total Clicks" value={analytics?.totalClicks || 0} icon={BarChart3} />
         <StatCard title="Unique Visitors" value={analytics?.uniqueVisitors || 0} icon={Globe} />
-        <StatCard title="Privacy Level" value="SHA-256" icon={Shield} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

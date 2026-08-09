@@ -1,44 +1,52 @@
 import React, { useState } from 'react';
-import { Key } from 'lucide-react';
-import Button from '../../components/common/Button';
-import api from '../../lib/axios';
+import { Bell, Moon, Sun } from 'lucide-react';
 
 export function SettingsPage() {
-  const [apiKey, setApiKey] = useState('lg_live_9f8e7d6c5b4a3210');
-
-  const handleGenerateKey = async () => {
-    try {
-      const res = await api.post('/api/v1/security/api-keys', { name: 'Default API Key' });
-      if (res.data?.success) setApiKey(res.data.data.key);
-    } catch {
-      alert('Generated new API Key');
-    }
-  };
+  const [emailNotifs, setEmailNotifs] = useState(true);
+  const [darkMode, setDarkMode] = useState(true);
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-6 w-full max-w-2xl">
       <div>
-        <h1 className="text-lg font-bold text-text-primary">Workspace Settings</h1>
-        <p className="text-xs text-text-tertiary mt-0.5">Configure API keys and developer integration tokens.</p>
+        <h1 className="text-lg font-bold text-text-primary">Settings</h1>
+        <p className="text-xs text-text-tertiary mt-0.5">Manage your workspace preferences.</p>
       </div>
 
       <div className="bg-surface border border-hairline p-5 rounded-xl space-y-4">
         <h3 className="text-xs font-bold text-text-primary flex items-center gap-2">
-          <Key className="w-4 h-4 text-accent" strokeWidth={1.75} />
-          <span>API Access Key</span>
+          <Bell className="w-4 h-4 text-accent" strokeWidth={1.75} />
+          <span>Notifications</span>
         </h3>
-
-        <div className="space-y-2">
-          <p className="text-xs text-text-secondary">Use this key in Bearer Authorization headers for programmatic API access.</p>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              readOnly
-              value={apiKey}
-              className="flex-1 px-3 py-2 bg-canvas border border-hairline rounded-lg font-mono text-accent font-semibold text-xs focus:outline-none"
-            />
-            <Button onClick={handleGenerateKey} variant="secondary">Roll Key</Button>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-text-primary">Email Notifications</p>
+            <p className="text-xs text-text-tertiary">Receive email alerts when links get clicks.</p>
           </div>
+          <button
+            onClick={() => setEmailNotifs(!emailNotifs)}
+            className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${emailNotifs ? 'bg-accent' : 'bg-surface-2 border border-hairline'}`}
+          >
+            <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${emailNotifs ? 'left-5' : 'left-0.5'}`} />
+          </button>
+        </div>
+      </div>
+
+      <div className="bg-surface border border-hairline p-5 rounded-xl space-y-4">
+        <h3 className="text-xs font-bold text-text-primary flex items-center gap-2">
+          {darkMode ? <Moon className="w-4 h-4 text-accent" strokeWidth={1.75} /> : <Sun className="w-4 h-4 text-accent" strokeWidth={1.75} />}
+          <span>Appearance</span>
+        </h3>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-text-primary">Dark Mode</p>
+            <p className="text-xs text-text-tertiary">Use dark theme across the dashboard.</p>
+          </div>
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className={`relative w-10 h-5 rounded-full transition-colors duration-200 ${darkMode ? 'bg-accent' : 'bg-surface-2 border border-hairline'}`}
+          >
+            <span className={`absolute top-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${darkMode ? 'left-5' : 'left-0.5'}`} />
+          </button>
         </div>
       </div>
     </div>

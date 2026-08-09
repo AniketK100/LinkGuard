@@ -77,6 +77,12 @@
     color: #0F172A;
   }
 
+  select option {
+    background-color: rgb(var(--surface-rgb));
+    color: rgb(var(--text-primary-rgb));
+    padding: 8px;
+  }
+
   /* Hairline borders */
   .border-h {
     border-color: rgb(var(--hairline-rgb));
