@@ -1,166 +1,255 @@
-# LinkGuard - URL shortening with real-time analytics
-
-![Java](https://img.shields.io/badge/JAVA-21-orange?style=for-the-badge&logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/SPRING_BOOT-3.4.2-brightgreen?style=for-the-badge&logo=springboot)
-![Redis](https://img.shields.io/badge/REDIS-8.0-red?style=for-the-badge&logo=redis)
-![PostgreSQL](https://img.shields.io/badge/POSTGRESQL-18-blue?style=for-the-badge&logo=postgresql)
-![React](https://img.shields.io/badge/REACT-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black)
-![Tailwind CSS](https://img.shields.io/badge/TAILWIND_CSS-3.4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)
-![Docker](https://img.shields.io/badge/DOCKER-ENABLED-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-
-![LinkGuard Platform](frontend/public/og-image.png)
+<div align="center">
+  <h1>LinkGuard - URL shortening with real-time analytics</h1>
+  <p>
+    <img src="https://img.shields.io/badge/JAVA-21-orange?style=for-the-badge&logo=openjdk" alt="Java 21" />
+    <img src="https://img.shields.io/badge/SPRING_BOOT-3.4.2-brightgreen?style=for-the-badge&logo=springboot" alt="Spring Boot 3.4.2" />
+    <img src="https://img.shields.io/badge/REDIS-8.0-red?style=for-the-badge&logo=redis" alt="Redis 8.0" />
+    <img src="https://img.shields.io/badge/POSTGRESQL-18-blue?style=for-the-badge&logo=postgresql" alt="PostgreSQL 18" />
+    <img src="https://img.shields.io/badge/REACT-19.0-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React 19.0" />
+    <img src="https://img.shields.io/badge/TAILWIND_CSS-3.4-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS 3.4" />
+    <img src="https://img.shields.io/badge/DOCKER-ENABLED-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Enabled" />
+  </p>
+  <br />
+  <img src="frontend/public/og-image.png" alt="LinkGuard Control Room Platform" width="100%" />
+</div>
 
 ---
 
-## ⚡ Overview
+## 📋 Table of Contents
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Detailed Flow Diagram](#-detailed-flow-diagram)
+- [System Architecture & Workflow](#-system-architecture--workflow)
+- [Getting Started](#-getting-started)
+- [Deployment](#-deployment)
+- [Security](#-security)
+- [API Overview](#-api-overview)
+- [Performance](#-performance)
+- [Documentation](#-documentation)
 
-**LinkGuard** is a enterprise-grade, high-performance URL shortener built for speed, privacy, and real-time analytics. Powered by a **Redis Cache-Aside Architecture** and **Spring Boot 3.4**, LinkGuard resolves short links in **<10ms** while logging telemetry data safely with **SHA-256 IP anonymization**.
+---
+
+## ✨ Features
+
+- **⚡ Sub-10ms Redirection**: Redis cache-aside architecture delivers instantaneous link resolution (<10ms).
+- **🔒 SHA-256 IP Privacy**: Automatic daily salted IP hashing protects visitor privacy with zero raw IP persistence.
+- **📊 Real-Time Analytics**: Geolocation breakdowns, device types, operating systems, browsers, and referral traffic tracking.
+- **🎨 Dynamic QR Code Studio**: Instant offline client-side vector (`SVG`) and raster (`PNG`) QR code generator with live color customizer.
+- **🔑 Granular Security Controls**: Optional password protection for short links with instant bcrypt-backed access verification.
+- **🛡️ Enterprise Role-Based Access (RBAC)**: Dedicated User Dashboard and Admin Moderation Control Room (`ROLE_USER` / `ROLE_ADMIN`).
+- **📱 Ultra-Responsive 3D Interface**: Adaptive layout across mobile, tablet, desktop, and ultrawide displays with subtle 3D lift effects and dark/light modes.
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend
+- **Core Runtime**: Java 21 (JDK 21)
+- **Framework**: Spring Boot 3.4.2 (Spring MVC, Spring Security 6, Spring Data JPA)
+- **Database**: PostgreSQL 18 (Neon Serverless PostgreSQL with Flyway Migrations)
+- **Cache Engine**: Redis 8.0 (Upstash Distributed In-Memory Cache)
+- **Security**: JWT (jjwt 0.12), BCrypt Password Encoder
+
+### Frontend
+- **Framework**: React 19 (Vite 6.4 build system)
+- **Styling**: Vanilla CSS tokens & Tailwind CSS 3.4
+- **Icons & Motion**: Lucide React, Motion (Framer Motion 12)
+- **QR Engine**: Client-Side `qrcode` JS matrix generator
+
+### Infrastructure
+- **Containerization**: Docker & Docker Compose
+- **Hosting**: Render (Spring Boot API) & Vercel (React Frontend)
+
+---
+
+## 🔀 Detailed Flow Diagram
+
+The diagram below illustrates the exact end-to-end execution flow across authentication, short link lookup, Redis caching, click logging, and analytics:
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 🌐 Visitor / Client
+    participant Frontend as ⚛️ React 19 SPA
+    participant Controller as ⚡ Spring Boot REST Controller
+    participant Auth as 🔒 JwtAuthenticationFilter
+    participant Redis as 🔴 Redis Cache (Upstash)
+    participant Postgres as 🐘 PostgreSQL DB (Neon)
+    participant Anonymizer as 🛡️ SHA-256 Anonymizer
+
+    %% SHORT LINK REDIRECTION FLOW
+    rect rgb(16, 17, 20)
+        note right of User: 1. Short Link Resolution Flow (GET /:shortCode)
+        User->>Frontend: Request short URL (e.g. /drive)
+        Frontend->>Controller: GET /api/v1/redirects/drive
+        Controller->>Redis: Cache Lookup: GET url:shortCode:drive
+        alt Cache Hit (<10ms)
+            Redis-->>Controller: Return ShortUrlDTO
+        else Cache Miss
+            Redis-->>Controller: null
+            Controller->>Postgres: SELECT * FROM urls WHERE short_code = 'drive'
+            Postgres-->>Controller: Url Entity
+            Controller->>Redis: Warm Cache: SET url:shortCode:drive (TTL 1h)
+        end
+        Controller-->>Frontend: Return Target Destination URL
+        Frontend->>User: 302 Found Redirect to Destination
+
+        %% ASYNCHRONOUS TELEMETRY PIPELINE
+        par Async Analytics Pipeline
+            Controller->>Anonymizer: Hash IP with Daily Salt (SHA-256)
+            Anonymizer-->>Postgres: INSERT INTO click_logs (url_id, hashed_ip, country, device, browser)
+        end
+    end
+
+    %% AUTHENTICATION & MANAGEMENT FLOW
+    rect rgb(24, 24, 28)
+        note right of User: 2. Authenticated Management & JWT Verification
+        User->>Frontend: Submit Login Credentials
+        Frontend->>Controller: POST /api/v1/auth/login
+        Controller->>Postgres: Query User & Validate BCrypt Password
+        Postgres-->>Controller: Validated UserPrincipal
+        Controller-->>Frontend: Issue Signed JWT Access Token (15m) + Refresh Token
+        Frontend->>User: Store Token & Redirect to Dashboard (/dashboard)
+    end
+```
 
 ---
 
 ## 🏗️ System Architecture & Workflow
 
-LinkGuard utilizes a dual-tier storage strategy combining ultra-low-latency in-memory cache (**Upstash / Redis 8**) with ACID-compliant persistent storage (**Neon / PostgreSQL 18**).
+LinkGuard isolates high-frequency read requests to memory while ensuring data durability through asynchronous database writes:
 
 ```mermaid
 flowchart TD
-    Client[🌐 Client / Browser] -->|GET /:shortCode| RedirectionController[⚡ Spring Boot Controller]
-    
-    subgraph Storage Tier
-        RedirectionController -->|1. Cache Lookup| Redis[(🔴 Redis 8.0 Memory Cache)]
-        Redis -->|Hit <10ms| FastReturn[🚀 302 Found Redirect]
-        
-        Redis -.->|Miss| Postgres[(🐘 PostgreSQL 18 DB)]
-        Postgres -->|Populate Cache| Redis
-        Postgres -->|Return Entity| RedirectionController
+    subgraph Client Layer
+        Browser[🌐 Web Browser / Mobile Device]
     end
 
-    subgraph Privacy & Telemetry Tier
-        RedirectionController -->|2. Asynchronous Click Event| AnalyticsService[📊 Analytics Pipeline]
-        AnalyticsService -->|SHA-256 Salted Hash| Anonymizer[🔒 IP Anonymizer]
-        Anonymizer -->|Save Click Log| ClickDB[(📊 Analytics Table)]
+    subgraph Edge & Routing Layer
+        Vercel[⚡ Vercel Frontend Deployment]
+        Browser -->|User Interaction| Vercel
+    end
+
+    subgraph Application Tier
+        SpringBoot[🛡️ Spring Boot 3.4 API Gateway]
+        SecurityFilter[🔒 Spring Security + JWT Filter]
+        Vercel -->|REST / JSON| SpringBoot
+        SpringBoot --> SecurityFilter
+    end
+
+    subgraph High-Speed Memory Tier
+        RedisCache[(🔴 Upstash Redis 8 Cache)]
+        SpringBoot <-->|Sub-10ms Lookup| RedisCache
+    end
+
+    subgraph Persistence & Analytics Tier
+        PostgresDB[(🐘 Neon PostgreSQL 18 DB)]
+        Anonymization[🔐 SHA-256 IP Salted Anonymizer]
+        SpringBoot <-->|JPA Read/Write| PostgresDB
+        SpringBoot --> Anonymization
+        Anonymization -->|Click Logs| PostgresDB
     end
 ```
 
-### 🔁 End-to-End Workflow
-
-1. **Short Link Resolution**:
-   - Visitor requests `http://localhost:3000/drive` or `https://linkguard.app/drive`.
-   - Backend queries **Redis In-Memory Cache**.
-   - **Cache Hit**: Instant `302 Found` HTTP redirect in **<10ms**.
-   - **Cache Miss**: Fallback to **PostgreSQL**, populate Redis cache asynchronously, and redirect visitor.
-
-2. **Privacy-Preserving Telemetry**:
-   - Visitor IP is hashed using **SHA-256** with a daily rotating salt key before persistence.
-   - Raw IP addresses are **never written to disk or database tables**.
-
-3. **Base62 Encoding**:
-   - High-throughput Base62 generator converts sequential auto-increment identifiers to compact, collision-free short slugs.
-
 ---
 
-## ✨ Features & Component Breakdown
-
-### 🎯 Public Portal
-- **Hero Command Bar**: Instant short link generation with instant one-click copying.
-- **Dynamic 404 Resolution**: Theme-matched 404 page integrated directly into public routing.
-- **Aesthetic Redirect Screen**: High-craft animated redirection telemetry screen with live status pings.
-
-### 👤 User Dashboard (`/dashboard/*`)
-- **Link Directory**: Interactive data table for inspecting, disabling, enabling, and deleting short links.
-- **Real-Time Analytics Studio**: View click distribution by country, device type, browser, and referral source.
-- **Dynamic QR Code Studio**: Instant offline client-side vector (`SVG`) and raster (`PNG`) QR code generator with live color customizer.
-- **Workspace Settings**: Accessible high-contrast appearance toggle and notification preferences.
-
-### 🛡️ Admin Portal (`/admin/*`)
-- **Global Link Moderation**: Searchable directory for filtering links by target domain, short code, or keywords.
-- **User Management**: Instant search filter for user emails or display names with quick refresh.
-- **Security & Audit Logs**: Detailed system audit trail and threat detection metrics.
-
----
-
-## 📁 Repository Structure
-
-```
-LinkGuard/
-├── backend/                  # Spring Boot 3.4.2 REST API
-│   ├── src/main/java/app/linkguard/
-│   │   ├── config/           # Security, CORS, Redis & OpenAPI Config
-│   │   ├── controller/       # REST API Endpoints & Redirect Controllers
-│   │   ├── dto/              # Data Transfer Objects
-│   │   ├── model/            # JPA Entities (User, Url, ClickLog, Audit)
-│   │   ├── repository/       # PostgreSQL Repositories
-│   │   ├── security/         # JWT Filters & RBAC Password Encoders
-│   │   └── service/          # Core Business Logic & Base62 Generator
-│   └── pom.xml               # Maven Project POM
-├── frontend/                 # React 19 + Vite + Tailwind CSS Application
-│   ├── public/               # Static Assets (og-image.png, favicon.svg)
-│   ├── src/
-│   │   ├── components/       # Reusable UI Components (Navbar, Footer, Modal, Button)
-│   │   ├── context/          # Theme & Auth React Context Providers
-│   │   ├── layouts/          # Public, User Dashboard & Admin Layouts
-│   │   ├── pages/            # Public, User & Admin Page Views
-│   │   └── routes/           # AppRoutes Central Router
-│   ├── package.json          # Dependencies (qrcode, lucide-react, react-router-dom)
-│   └── vite.config.js        # Vite Config with Dev Server Proxy (Port 3000 -> 8080)
-├── docker-compose.yml        # Docker Orchestration Configuration
-├── .env.example              # Environment Variable Template
-├── SECURITY.md               # Security & Compliance Policy
-└── README.md                 # Technical Documentation
-```
-
----
-
-## ⚡ Quick Start & Installation
+## 🚀 Getting Started
 
 ### Prerequisites
-- **Java 21 JDK**
+- **Java JDK 21**
 - **Node.js 18+ & npm**
-- **PostgreSQL 15+** (or Neon PostgreSQL)
-- **Redis 7+** (or Upstash Redis)
+- **PostgreSQL 15+**
+- **Redis 7+**
 
-### 1. Backend Setup
+### Local Setup
 
-```bash
-# Navigate to backend directory
-cd backend
+1. **Clone Repository**:
+   ```bash
+   git clone https://github.com/Sahil-Ghorpade/LinkGuard.git
+   cd LinkGuard
+   ```
 
-# Configure environment variables (or set in application-dev.yml)
-cp ../.env.example .env
+2. **Run Backend Service**:
+   ```bash
+   cd backend
+   cp ../.env.example .env
+   mvn spring-boot:run -Dspring-boot.run.profiles=dev
+   ```
+   *Backend starts at `http://localhost:8080`.*
 
-# Compile and run Spring Boot server
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-```
-*Backend runs on `http://localhost:8080`.*
-
-### 2. Frontend Setup
-
-```bash
-# Navigate to frontend directory
-cd frontend
-
-# Install Node dependencies
-npm install
-
-# Start Vite dev server
-npm run dev
-```
-*Frontend runs on `http://localhost:3000`.*
+3. **Run Frontend Application**:
+   ```bash
+   cd frontend
+   npm install
+   npm run dev
+   ```
+   *Frontend starts at `http://localhost:3000`.*
 
 ---
 
-## 🧪 Production Verification
+## 📦 Deployment
 
-Verify production build stability:
+### Production Build Verification
 
 ```bash
-# Build production bundle
+# Build Frontend Production Bundle
 cd frontend
 npm run build
+
+# Compile Backend Production JAR
+cd ../backend
+mvn clean package -DskipTests
 ```
+
+### Environment Variables
+Configure environment variables using [.env.example](.env.example):
+- `SPRING_PROFILES_ACTIVE=prod`
+- `DB_URL=jdbc:postgresql://<HOST>:5432/<DB>?sslmode=require`
+- `REDIS_HOST=<REDIS_HOST>`
+- `JWT_SECRET=<256_BIT_KEY>`
 
 ---
 
-## 📄 License & Security
+## 🛡️ Security
 
-This project is licensed under the MIT License. For security disclosures, refer to [SECURITY.md](SECURITY.md).
+LinkGuard adheres to defense-in-depth security principles:
+- **IP Anonymization**: All visitor IPs pass through `SHA-256` hashing with daily salted rotation before logging.
+- **HTTP Security Headers**: Enforces strict `Content-Security-Policy`, `HSTS`, `X-Frame-Options: DENY`, and `X-Content-Type-Options: nosniff`.
+- **JWT Protection**: Short-lived access tokens (15m) with cryptographically bound refresh tokens.
+
+For complete compliance information, see [SECURITY.md](SECURITY.md).
+
+---
+
+## 📡 API Overview
+
+| Method | Endpoint | Description | Auth Required |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/:shortCode` | Resolves short link redirect (<10ms) | Public |
+| `POST` | `/api/v1/urls` | Creates a shortened link or custom slug | Optional |
+| `GET` | `/api/v1/urls` | Retrieves user's shortened links | `ROLE_USER` |
+| `GET` | `/api/v1/analytics/{id}` | Returns click analytics telemetry | `ROLE_USER` |
+| `GET` | `/api/v1/admin/urls` | Global link moderation directory | `ROLE_ADMIN` |
+| `GET` | `/api/v1/admin/users` | Admin user directory search | `ROLE_ADMIN` |
+
+---
+
+## ⚡ Performance
+
+- **Redirection Latency**: **<10ms** cache hit response time via Redis 8 cache-aside layer.
+- **Throughput**: High concurrency request handling powered by Spring Boot NIO Tomcat executor threads.
+- **Bundle Efficiency**: Vite 6.4 chunk splitting with gzip compression (<120 kB asset bundles).
+
+---
+
+## 📄 Documentation
+
+- [SECURITY.md](SECURITY.md) — Security Architecture & Compliance Guidelines
+- [llms.txt](frontend/public/llms.txt) — LLM API Specification & Endpoint Index
+- [robots.txt](frontend/public/robots.txt) — Search Engine Crawler Rules
+
+---
+
+<div align="center">
+  <sub>Built with precision by LinkGuard Engineering. Licensed under the MIT License.</sub>
+</div>

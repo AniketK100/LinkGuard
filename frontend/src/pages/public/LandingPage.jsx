@@ -32,7 +32,7 @@ export function LandingPage() {
     try {
       const response = await api.post('/api/v1/urls', { originalUrl: url.trim() });
       if (response.data?.success) {
-        const backendBase = import.meta.env.VITE_API_BASE_URL || 'https://linkguard-flve.onrender.com';
+        const backendBase = import.meta.env.VITE_API_BASE_URL || window.location.origin;
         setShortUrl(backendBase + '/' + response.data.data.shortCode);
       }
     } catch (err) {

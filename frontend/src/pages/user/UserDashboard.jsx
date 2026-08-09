@@ -49,7 +49,7 @@ export function UserDashboard() {
   };
 
   const copyShortUrl = (shortCode, id) => {
-    const backendBase = import.meta.env.VITE_API_BASE_URL || 'https://linkguard-flve.onrender.com';
+    const backendBase = import.meta.env.VITE_API_BASE_URL || window.location.origin;
     navigator.clipboard.writeText(backendBase + '/' + shortCode);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);

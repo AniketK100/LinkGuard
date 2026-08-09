@@ -22,8 +22,10 @@ public class AdminDataInitializer implements CommandLineRunner {
     public void run(String... args) {
         try {
             String adminEmail = "admin@linkguard.app";
-            if (!userRepository.existsByEmail(adminEmail)) {
-                User admin = User.builder()
+            User admin = userRepository.findByEmail(adminEmail).orElse(null);
+
+            if (admin == null) {
+                admin = User.builder()
                         .name("LinkGuard Admin")
                         .email(adminEmail)
                         .passwordHash(passwordEncoder.encode("AdminPassword123!"))
@@ -34,9 +36,16 @@ public class AdminDataInitializer implements CommandLineRunner {
 
                 userRepository.save(admin);
                 log.info("Successfully initialized default Admin user: {}", adminEmail);
+            } else {
+                // Ensure valid BCrypt hash for AdminPassword123!
+                admin.setPasswordHash(passwordEncoder.encode("AdminPassword123!"));
+                admin.setRole(Role.ADMIN);
+                admin.setStatus(UserStatus.ACTIVE);
+                userRepository.save(admin);
+                log.info("Successfully updated default Admin user credentials: {}", adminEmail);
             }
         } catch (Exception ex) {
-            log.error("Failed to seed default admin user: ", ex);
+            log.error("Failed to seed or update default admin user: ", ex);
         }
     }
 }
