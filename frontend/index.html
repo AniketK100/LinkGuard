@@ -114,13 +114,60 @@
   </head>
   <body class="bg-canvas text-text-primary antialiased min-h-screen font-sans">
     <div id="root">
-      <div style="min-height:100vh;background-color:#08090B;color:#FFFFFF;display:flex;align-items:center;justify-content:center;font-family:sans-serif;">
-        <div style="text-align:center;">
-          <img src="/logo.svg" alt="LinkGuard Logo" width="48" height="48" style="margin:0 auto 16px;display:block;" />
-          <p style="font-size:14px;font-weight:600;letter-spacing:0.05em;color:#94A3B8;">LOADING LINKGUARD…</p>
-        </div>
+      <!-- Pre-rendered SEO content (replaced by React on hydration) -->
+      <div style="min-height:100vh;background-color:#08090B;color:#FFFFFF;font-family:sans-serif;">
+        <header role="banner" style="border-bottom:1px solid #1E293B;padding:16px 24px;">
+          <nav role="navigation" aria-label="Main Navigation" style="display:flex;align-items:center;gap:24px;max-width:1200px;margin:0 auto;">
+            <a href="/" style="font-weight:800;font-size:18px;color:#FFFFFF;text-decoration:none;">LinkGuard</a>
+            <a href="/features" style="color:#94A3B8;text-decoration:none;font-size:14px;">Features</a>
+            <a href="/pricing" style="color:#94A3B8;text-decoration:none;font-size:14px;">Pricing</a>
+            <a href="/about" style="color:#94A3B8;text-decoration:none;font-size:14px;">About</a>
+            <a href="/contact" style="color:#94A3B8;text-decoration:none;font-size:14px;">Contact</a>
+          </nav>
+        </header>
+        <main id="main-content" role="main" style="max-width:900px;margin:0 auto;padding:48px 24px;text-align:center;">
+          <h1 style="font-size:clamp(32px,6vw,64px);font-weight:800;line-height:1.1;margin-bottom:16px;">Control room for your links</h1>
+          <p style="font-size:18px;color:#94A3B8;max-width:600px;margin:0 auto 32px;">Fast, reliable URL shortening with real-time analytics, privacy protection, and customizable QR codes.</p>
+          <div style="display:flex;align-items:center;justify-content:center;margin-bottom:48px;">
+            <img src="/logo.svg" alt="LinkGuard Logo" width="48" height="48" style="margin-right:12px;" />
+            <p style="font-size:14px;font-weight:600;letter-spacing:0.05em;color:#94A3B8;">LOADING LINKGUARD…</p>
+          </div>
+          <section>
+            <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Everything you need for link management</h2>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px;text-align:left;">
+              <div style="background:#0F1117;border:1px solid #1E293B;border-radius:12px;padding:24px;">
+                <h3 style="font-weight:700;margin-bottom:8px;">Real-Time Analytics</h3>
+                <p style="font-size:14px;color:#94A3B8;">Track clicks by location, device, browser, and referral source. All visitor data is anonymized with SHA-256 hashing.</p>
+              </div>
+              <div style="background:#0F1117;border:1px solid #1E293B;border-radius:12px;padding:24px;">
+                <h3 style="font-weight:700;margin-bottom:8px;">Custom QR Codes</h3>
+                <p style="font-size:14px;color:#94A3B8;">Generate customizable QR codes with custom colors and download them in PNG or SVG formats.</p>
+              </div>
+              <div style="background:#0F1117;border:1px solid #1E293B;border-radius:12px;padding:24px;">
+                <h3 style="font-weight:700;margin-bottom:8px;">Advanced Security</h3>
+                <p style="font-size:14px;color:#94A3B8;">Protect your links with password protection, rate limiting, and SHA-256 IP privacy.</p>
+              </div>
+              <div style="background:#0F1117;border:1px solid #1E293B;border-radius:12px;padding:24px;">
+                <h3 style="font-weight:700;margin-bottom:8px;">Instant Redirection</h3>
+                <p style="font-size:14px;color:#94A3B8;">Links resolve in under 10ms using Redis cache-aside architecture for zero-delay redirects.</p>
+              </div>
+            </div>
+          </section>
+          <section style="margin-top:48px;">
+            <h2 style="font-size:28px;font-weight:800;margin-bottom:24px;">Frequently Asked Questions</h2>
+            <div style="text-align:left;">
+              <h3 style="font-weight:700;margin:16px 0 4px;">How does LinkGuard ensure sub-100ms redirection speed?</h3>
+              <p style="font-size:14px;color:#94A3B8;">LinkGuard uses a Redis cache-aside architecture. Short link lookups resolve from memory in under 10ms with database fallback.</p>
+              <h3 style="font-weight:700;margin:16px 0 4px;">Is visitor IP data kept private and GDPR compliant?</h3>
+              <p style="font-size:14px;color:#94A3B8;">Yes. IPs are anonymized via SHA-256 hashing with a daily rotating salt before analytics logging. No raw IPs are stored.</p>
+              <h3 style="font-weight:700;margin:16px 0 4px;">Can I customize QR code colors?</h3>
+              <p style="font-size:14px;color:#94A3B8;">Yes. Our QR Studio lets you customize foreground/background colors and export in PNG or SVG formats.</p>
+            </div>
+          </section>
+        </main>
       </div>
     </div>
+
     <noscript>
       <header role="banner">
         <nav role="navigation" aria-label="Main Navigation">
