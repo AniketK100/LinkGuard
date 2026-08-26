@@ -19,7 +19,7 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private static final String DEFAULT_HINT = "Check sitemap at /sitemap.xml, OpenAPI spec at /openapi.json, or agent guidance at /llms.txt";
+    private static final String DEFAULT_HINT = "Check sitemap at /sitemap.xml, OpenAPI spec at /openapi.yaml, or agent guidance at /llms.txt";
 
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(

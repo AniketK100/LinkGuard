@@ -23,7 +23,7 @@ export function FeaturesPage() {
           <CheckCircle2 className="w-3.5 h-3.5" /> High-Performance Capabilities
         </div>
         <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-text-primary tracking-tight">
-          Enterprise URL Infrastructure Features
+          URL Infrastructure Features
         </h1>
         <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
           Discover the complete suite of high-speed URL shortening, vector QR code generation, password protection, and privacy-first analytics tools.

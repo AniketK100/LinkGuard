@@ -1,5 +1,5 @@
 <div align="center">
-  <h1>LinkGuard - URL shortening with real-time analytics</h1>
+  <h1>LinkGuard — URL Shortener &amp; Analytics Platform</h1>
   <p>
     <img src="https://img.shields.io/badge/JAVA-21-orange?style=for-the-badge&logo=openjdk" alt="Java 21" />
     <img src="https://img.shields.io/badge/SPRING_BOOT-3.4.2-brightgreen?style=for-the-badge&logo=springboot" alt="Spring Boot 3.4.2" />
@@ -10,7 +10,7 @@
     <img src="https://img.shields.io/badge/DOCKER-ENABLED-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Enabled" />
   </p>
   <br />
-  <img src="frontend/public/og-image.png" alt="LinkGuard Control Room Platform" width="100%" />
+  <img src="frontend/public/og-image.png" alt="LinkGuard URL Shortener & Analytics Platform" width="100%" />
 </div>
 
 ---

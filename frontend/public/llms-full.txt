@@ -1,6 +1,6 @@
 # LinkGuard Platform — Complete AI Agent & System Documentation
 
-> LinkGuard Platform is an enterprise-grade URL shortener, link management platform, and analytics engine built with Spring Boot 3.4, Java 21, Redis 8, PostgreSQL, and React.
+> LinkGuard Platform is a high-performance URL shortener, link management platform, and analytics engine built with Spring Boot 3.4, Java 21, Redis 8, PostgreSQL, and React.
 
 ## System Overview & Architecture
 LinkGuard provides sub-10ms URL redirection using a Redis in-memory Cache-Aside pattern. All incoming visitor IP addresses pass through daily salted SHA-256 cryptographic hashing before storage to guarantee GDPR visitor privacy compliance.

@@ -92,7 +92,7 @@ export function LandingPage() {
         {/* Centered Hero Section */}
         <section className="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto px-4 py-8 text-center space-y-8 w-full">
           <h1 id="main-heading" className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-[1.1]">
-            Enterprise URL Shortener &amp;<br />
+            URL Shortener &amp;<br />
             <span className="text-text-primary underline decoration-2 underline-offset-8">Analytics Platform</span>
           </h1>
 

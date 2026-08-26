@@ -3,42 +3,53 @@
   <rect width="1200" height="630" fill="#08090B"/>
   
   <!-- Subtle Ambient Glow -->
-  <circle cx="600" cy="315" r="400" fill="#6366F1" opacity="0.08"/>
+  <circle cx="600" cy="315" r="420" fill="#6366F1" opacity="0.06"/>
   
   <!-- Card Container -->
-  <rect x="60" y="60" width="1080" height="510" rx="32" fill="#101114" stroke="#26282D" stroke-width="3"/>
+  <rect x="50" y="50" width="1100" height="530" rx="28" fill="#0E0F12" stroke="#1E2026" stroke-width="2"/>
   
   <!-- Brand Header -->
-  <g transform="translate(120, 130)">
+  <g transform="translate(100, 100)">
     <!-- Brand Shield Box -->
-    <rect width="72" height="72" rx="20" fill="#F5F6F7"/>
-    <path d="M36 18L56 27V43C56 57 47 68 36 72C25 68 16 57 16 43V27L36 18Z" fill="#08090B"/>
-    <path d="M30 42L34 46L43 37" stroke="#F5F6F7" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect width="64" height="64" rx="18" fill="#F5F6F7"/>
+    <path d="M32 16L48 24V38C48 50 40 60 32 63C24 60 16 50 16 38V24L32 16Z" fill="#08090B"/>
+    <path d="M27 37L31 41L39 33" stroke="#F5F6F7" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
     
-    <!-- Title & Tagline -->
-    <text x="96" y="44" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="42" font-weight="800" letter-spacing="-1">LinkGuard</text>
-    <text x="96" y="68" fill="#9A9DA6" font-family="Plus Jakarta Sans, sans-serif" font-size="18" font-weight="600" letter-spacing="1">PRIVACY-FIRST LINK PLATFORM</text>
+    <!-- Title -->
+    <text x="84" y="44" fill="#F5F6F7" font-family="Outfit, Plus Jakarta Sans, sans-serif" font-size="38" font-weight="800" letter-spacing="-0.5">LinkGuard</text>
   </g>
   
   <!-- Hero Heading -->
-  <text x="120" y="320" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="54" font-weight="800" letter-spacing="-1.5">Control room for your links.</text>
-  <text x="120" y="380" fill="#9A9DA6" font-family="Plus Jakarta Sans, sans-serif" font-size="24" font-weight="500">Fast, secure URL shortener with real-time analytics &amp; custom QR codes.</text>
+  <g transform="translate(100, 250)">
+    <text x="0" y="0" fill="#F5F6F7" font-family="Outfit, Plus Jakarta Sans, sans-serif" font-size="56" font-weight="800" letter-spacing="-1.5">URL Shortener &amp;</text>
+    <text x="0" y="66" fill="#F5F6F7" font-family="Outfit, Plus Jakarta Sans, sans-serif" font-size="56" font-weight="800" letter-spacing="-1.5">Analytics Platform</text>
+    <line x1="0" y1="80" x2="480" y2="80" stroke="#F5F6F7" stroke-width="3"/>
+  </g>
+  
+  <!-- Subtitle -->
+  <text x="100" y="380" fill="#9A9DA6" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="500">Control room for your links: fast, reliable URL shortening with real-time analytics,</text>
+  <text x="100" y="412" fill="#9A9DA6" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="500">privacy protection, and customizable QR codes.</text>
   
   <!-- Feature Badges Bar -->
-  <g transform="translate(120, 440)">
-    <!-- Pill 1 -->
-    <rect x="0" y="0" width="180" height="44" rx="22" fill="#18181B" stroke="#26282D" stroke-width="1.5"/>
-    <circle cx="24" cy="22" r="4" fill="#10B981"/>
-    <text x="38" y="27" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">&lt;100ms Speed</text>
+  <g transform="translate(100, 480)">
+    <!-- Pill 1: <100ms -->
+    <rect x="0" y="0" width="210" height="48" rx="24" fill="#141519" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="28" cy="24" r="5" fill="#10B981"/>
+    <text x="44" y="30" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700">&lt;100ms Speed</text>
 
-    <!-- Pill 2 -->
-    <rect x="196" y="0" width="195" height="44" rx="22" fill="#18181B" stroke="#26282D" stroke-width="1.5"/>
-    <circle cx="220" cy="22" r="4" fill="#6366F1"/>
-    <text x="234" y="27" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">SHA-256 Privacy</text>
+    <!-- Pill 2: 100% Secure -->
+    <rect x="226" y="0" width="220" height="48" rx="24" fill="#141519" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="254" cy="24" r="5" fill="#6366F1"/>
+    <text x="270" y="30" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700">100% Secure Privacy</text>
 
-    <!-- Pill 3 -->
-    <rect x="407" y="0" width="200" height="44" rx="22" fill="#18181B" stroke="#26282D" stroke-width="1.5"/>
-    <circle cx="431" cy="22" r="4" fill="#F59E0B"/>
-    <text x="445" y="27" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="14" font-weight="700">Vector QR Studio</text>
+    <!-- Pill 3: Custom Slugs -->
+    <rect x="462" y="0" width="220" height="48" rx="24" fill="#141519" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="490" cy="24" r="5" fill="#F59E0B"/>
+    <text x="506" y="30" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700">Instant Custom Slugs</text>
+
+    <!-- Pill 4: Real-Time Analytics -->
+    <rect x="698" y="0" width="230" height="48" rx="24" fill="#141519" stroke="#26282D" stroke-width="1.5"/>
+    <circle cx="726" cy="24" r="5" fill="#EC4899"/>
+    <text x="742" y="30" fill="#F5F6F7" font-family="Plus Jakarta Sans, sans-serif" font-size="15" font-weight="700">Real-Time Analytics</text>
   </g>
 </svg>

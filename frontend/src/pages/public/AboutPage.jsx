@@ -19,10 +19,10 @@ export function AboutPage() {
           <Award className="w-3.5 h-3.5" /> About LinkGuard Platform
         </div>
         <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-text-primary tracking-tight">
-          Enterprise Link Infrastructure Built for Speed & Privacy
+          Link Infrastructure Built for Speed & Privacy
         </h1>
         <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
-          LinkGuard Platform Inc. is an enterprise-grade URL shortening, analytics, and link management service. Designed from the ground up to combine sub-10ms Redis redirect speed with uncompromising GDPR privacy compliance and real-time visitor telemetry.
+          LinkGuard Platform Inc. is a high-performance URL shortening, analytics, and link management service. Designed from the ground up to combine sub-10ms Redis redirect speed with uncompromising GDPR privacy compliance and real-time visitor telemetry.
         </p>
       </div>
 

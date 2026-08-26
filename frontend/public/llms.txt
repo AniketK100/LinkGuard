@@ -1,6 +1,6 @@
 # LinkGuard Platform
 
-> LinkGuard Platform is an enterprise-grade URL shortener and analytics engine built for high-speed link management, vector QR code generation, and SHA-256 visitor privacy compliance.
+> LinkGuard Platform is a high-performance URL shortener and analytics engine built for speed, vector QR code generation, and SHA-256 visitor privacy compliance.
 
 LinkGuard provides sub-10ms URL redirection using a Redis in-memory Cache-Aside pattern and Spring Boot 3.4.
 

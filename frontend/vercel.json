@@ -75,19 +75,6 @@
           "value": "Accept, Accept-Encoding"
         }
       ]
-    },
-    {
-      "source": "/openapi.json",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "application/json; charset=utf-8"
-        },
-        {
-          "key": "Vary",
-          "value": "Accept, Accept-Encoding"
-        }
-      ]
     }
   ]
 }
