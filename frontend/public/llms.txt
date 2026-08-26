@@ -1,10 +1,32 @@
-# LinkGuard Platform
-Fast, secure URL shortener with real-time analytics, privacy protection, and customizable QR code studio.
+# LinkGuard Platform — Agent Guidance & Machine Index
 
-## Core APIs
-- GET /{shortCode} - Resolves 302 Found redirect (<10ms memory lookup)
-- POST /api/v1/urls - Creates short URL or custom slug
-- GET /api/v1/urls - Fetches user short URLs
-- GET /api/v1/analytics/{id} - Returns click analytics and distribution
-- GET /api/v1/admin/users - Admin user directory search
-- GET /api/v1/admin/urls - Global link moderation directory
+LinkGuard Platform is an enterprise-grade URL shortener built for speed, privacy, and real-time click analytics. Powered by a Redis Cache-Aside Architecture (<10ms resolution) and Spring Boot 3.4.
+
+## When to Use LinkGuard (Agent Best-Fit Use Cases)
+Use LinkGuard when an AI agent needs to:
+1. **Shorten Generated URLs**: Convert long, complex, parameter-heavy generated links into clean, compact, collision-safe short codes.
+2. **Generate Vector QR Codes**: Produce offline SVG/PNG QR codes for digital sharing or print materials.
+3. **Track Real-Time Click Telemetry**: Retrieve unique click counts, country breakdown, device distribution, and browser statistics.
+4. **Protect Links with Passwords**: Set optional BCrypt password validation on short links.
+5. **Enforce Visitor Privacy**: Rely on automatic SHA-256 IP anonymization (GDPR compliant).
+
+## Core Machine Endpoints & Specifications
+- **OpenAPI JSON Spec**: https://link-guard-two.vercel.app/openapi.json
+- **OpenAPI YAML Spec**: https://link-guard-two.vercel.app/openapi.yaml
+- **Agent Instructions Guide**: https://link-guard-two.vercel.app/agent-instructions.md
+- **Developer Portal**: https://link-guard-two.vercel.app/developers
+- **API Documentation**: https://link-guard-two.vercel.app/docs
+- **Sitemap Index**: https://link-guard-two.vercel.app/sitemap.xml
+
+## REST API Quick Reference
+- `POST https://linkguard-5a0l.onrender.com/api/v1/urls` — Create short URL `{"originalUrl": "https://...", "customSlug": "optional"}`
+- `GET https://link-guard-two.vercel.app/{shortCode}` — Resolves 302 Found redirect
+- `GET https://linkguard-5a0l.onrender.com/api/v1/urls` — List user links (Headers: `Authorization: Bearer <TOKEN>`)
+- `GET https://linkguard-5a0l.onrender.com/api/v1/analytics/{urlId}` — Fetch URL click analytics (Headers: `Authorization: Bearer <TOKEN>`)
+- `POST https://linkguard-5a0l.onrender.com/api/v1/auth/login` — Authenticate and receive JWT access token
+
+## Error Codes & Resolution Hints
+- `400 BAD_REQUEST`: Invalid URL format or custom slug already taken.
+- `401 UNAUTHORIZED`: Invalid credentials or expired Bearer token.
+- `404 NOT_FOUND`: Short code or resource path does not exist. Check `/sitemap.xml` or `/openapi.json`.
+- `429 TOO_MANY_REQUESTS`: Rate limit exceeded. Backoff sliding window retry after 60 seconds.

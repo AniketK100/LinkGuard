@@ -17,6 +17,8 @@ import RegisterPage from '../pages/public/RegisterPage';
 import PasswordVerifyPage from '../pages/public/PasswordVerifyPage';
 import PrivacyPage from '../pages/public/PrivacyPage';
 import TermsPage from '../pages/public/TermsPage';
+import DevelopersPage from '../pages/public/DevelopersPage';
+import DocsPage from '../pages/public/DocsPage';
 import ShortCodeRedirect from '../pages/public/ShortCodeRedirect';
 import NotFoundPage from '../pages/public/NotFoundPage';
 
@@ -49,6 +51,9 @@ export function AppRoutes() {
         <Route path="pricing" element={<PricingPage />} />
         <Route path="about" element={<AboutPage />} />
         <Route path="contact" element={<ContactPage />} />
+        <Route path="developers" element={<DevelopersPage />} />
+        <Route path="docs" element={<DocsPage />} />
+        <Route path="api" element={<DocsPage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="verify-password" element={<PasswordVerifyPage />} />

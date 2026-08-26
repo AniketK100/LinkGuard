@@ -14,24 +14,31 @@ public class UserAgentParser {
     }
 
     public static UserAgentInfo parse(String userAgent) {
-        if (userAgent == null || userAgent.isBlank()) {
+        return parse(userAgent, null);
+    }
+
+    public static UserAgentInfo parse(String userAgent, String secChUa) {
+        if ((userAgent == null || userAgent.isBlank()) && (secChUa == null || secChUa.isBlank())) {
             return new UserAgentInfo("Unknown", "Unknown", "desktop");
         }
 
-        String ua = userAgent.toLowerCase();
+        String ua = userAgent != null ? userAgent.toLowerCase() : "";
+        String ch = secChUa != null ? secChUa.toLowerCase() : "";
 
         // Browser Detection
         String browser = "Other";
-        if (ua.contains("edg/") || ua.contains("edge/")) {
+        if (ch.contains("brave") || ua.contains("brave")) {
+            browser = "Brave";
+        } else if (ua.contains("edg/") || ua.contains("edge/")) {
             browser = "Edge";
-        } else if (ua.contains("chrome") && !ua.contains("chromium")) {
+        } else if (ua.contains("opera") || ua.contains("opr/")) {
+            browser = "Opera";
+        } else if (ua.contains("chrome") || ua.contains("crios") || ua.contains("headlesschrome")) {
             browser = "Chrome";
-        } else if (ua.contains("firefox")) {
+        } else if (ua.contains("firefox") || ua.contains("fxios")) {
             browser = "Firefox";
         } else if (ua.contains("safari") && !ua.contains("chrome")) {
             browser = "Safari";
-        } else if (ua.contains("opera") || ua.contains("opr/")) {
-            browser = "Opera";
         }
 
         // OS Detection
@@ -50,7 +57,7 @@ public class UserAgentParser {
 
         // Device Type Detection
         String deviceType = "desktop";
-        if (ua.contains("mobile") || ua.contains("iphone") || ua.contains("android") && !ua.contains("tablet")) {
+        if (ua.contains("mobile") || ua.contains("iphone") || (ua.contains("android") && !ua.contains("tablet"))) {
             deviceType = "mobile";
         } else if (ua.contains("ipad") || ua.contains("tablet")) {
             deviceType = "tablet";

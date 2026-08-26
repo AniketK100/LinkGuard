@@ -5,6 +5,10 @@
   "framework": "vite",
   "rewrites": [
     {
+      "source": "/(openapi.json|openapi.yaml|llms.txt|llms-full.txt|agent-instructions.md|robots.txt|sitemap.xml)",
+      "destination": "/$1"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }
@@ -13,6 +17,10 @@
     {
       "source": "/(.*)",
       "headers": [
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
+        },
         {
           "key": "Strict-Transport-Security",
           "value": "max-age=31536000; includeSubDomains; preload"
@@ -40,6 +48,32 @@
         {
           "key": "X-XSS-Protection",
           "value": "1; mode=block"
+        }
+      ]
+    },
+    {
+      "source": "/(llms.txt|llms-full.txt|agent-instructions.md|openapi.yaml)",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
+        }
+      ]
+    },
+    {
+      "source": "/openapi.json",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "application/json; charset=utf-8"
+        },
+        {
+          "key": "Vary",
+          "value": "Accept, Accept-Encoding"
         }
       ]
     }

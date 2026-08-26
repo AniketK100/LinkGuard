@@ -15,8 +15,10 @@ public class ClickEvent {
     private Long urlId;
     private String shortCode;
     private String rawUserAgent;
+    private String secChUa;
     private String referrer;
     private String ipAddress;
+    private String country;
     @Builder.Default
     private Instant timestamp = Instant.now();
 }

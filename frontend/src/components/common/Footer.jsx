@@ -22,15 +22,19 @@ export function Footer() {
         {/* Links Columns */}
         {[
           { title: 'NAVIGATION', links: [['Home','/'],['Features','/features'],['Pricing','/pricing'],['About Us','/about']] },
-          { title: 'TOPICS', links: [['Analytics Dashboard','/dashboard/analytics'],['QR Code Studio','/dashboard/qr-codes'],['Instant Redirection','/features'],['Password Protection','/features']] },
-          { title: 'SUPPORT', links: [['Contact Us','/contact'],['Privacy Policy','/privacy'],['Terms Policy','/terms']] },
+          { title: 'DEVELOPERS', links: [['Developer Portal','/developers'],['API Docs','/docs'],['OpenAPI Spec','/openapi.json'],['LLM Instructions','/llms.txt']] },
+          { title: 'SUPPORT & LEGAL', links: [['Contact Us','/contact'],['Privacy Policy','/privacy'],['Terms Policy','/terms']] },
         ].map((section) => (
           <div key={section.title} className="space-y-3 sm:space-y-4">
             <h4 className="text-text-primary font-extrabold text-[11px] sm:text-xs uppercase tracking-widest">{section.title}</h4>
             <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm font-medium">
               {section.links.map(([label, path]) => (
                 <li key={label}>
-                  <Link to={path} className="text-text-secondary hover:text-text-primary transition-colors duration-150 inline-block py-0.5">{label}</Link>
+                  {path.startsWith('http') || path.endsWith('.json') || path.endsWith('.txt') ? (
+                    <a href={path} target="_blank" rel="noopener noreferrer" className="text-text-secondary hover:text-text-primary transition-colors duration-150 inline-block py-0.5">{label}</a>
+                  ) : (
+                    <Link to={path} className="text-text-secondary hover:text-text-primary transition-colors duration-150 inline-block py-0.5">{label}</Link>
+                  )}
                 </li>
               ))}
             </ul>

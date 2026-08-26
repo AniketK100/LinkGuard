@@ -1,5 +1,12 @@
 User-agent: *
 Allow: /
+Allow: /developers
+Allow: /docs
+Allow: /openapi.json
+Allow: /openapi.yaml
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /agent-instructions.md
 Allow: /features
 Allow: /pricing
 Allow: /about
@@ -8,6 +15,5 @@ Allow: /privacy
 Allow: /terms
 Disallow: /dashboard/
 Disallow: /admin/
-Disallow: /api/
 
-Sitemap: https://linkguard.app/sitemap.xml
+Sitemap: https://link-guard-two.vercel.app/sitemap.xml

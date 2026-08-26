@@ -30,7 +30,7 @@ export function Sidebar({ mode = 'user' }) {
   return (
     <>
       {/* Mobile Horizontal Navigation Header (< md) */}
-      <div className="md:hidden w-full bg-surface border-b border-hairline p-2 overflow-x-auto scrollbar-none flex items-center gap-1.5 sticky top-18 z-30">
+      <aside aria-label="Mobile Navigation Sidebar" className="md:hidden w-full bg-surface border-b border-hairline p-2 overflow-x-auto scrollbar-none flex items-center gap-1.5 sticky top-18 z-30">
         {links.map((link) => {
           const Icon = link.icon;
           return (
@@ -51,7 +51,7 @@ export function Sidebar({ mode = 'user' }) {
             </NavLink>
           );
         })}
-      </div>
+      </aside>
 
       {/* Desktop Sticky Vertical Sidebar (>= md) */}
       <aside className="hidden md:flex w-52 bg-surface border-r border-hairline sticky top-20 h-[calc(100vh-5rem)] py-4 px-2 flex-col justify-between flex-shrink-0 overflow-y-auto">

@@ -19,6 +19,8 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private static final String DEFAULT_HINT = "Check sitemap at /sitemap.xml, OpenAPI spec at /openapi.json, or agent guidance at /llms.txt";
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<ErrorResponse> handleResourceNotFoundException(
             ResourceNotFoundException ex, HttpServletRequest request) {
@@ -29,6 +31,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.NOT_FOUND.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
+                .hint(DEFAULT_HINT)
                 .build();
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
     }
@@ -43,6 +46,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.GONE.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
+                .hint("This short code link has expired.")
                 .build();
         return ResponseEntity.status(HttpStatus.GONE).body(errorResponse);
     }
@@ -57,6 +61,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.BAD_REQUEST.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
+                .hint("Ensure valid URL format and non-duplicate custom slug in request body.")
                 .build();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
     }
@@ -71,6 +76,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.UNAUTHORIZED.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
+                .hint("Provide valid Bearer JWT access token in HTTP Authorization header or authenticate at /api/v1/auth/login.")
                 .build();
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
     }
@@ -85,6 +91,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.FORBIDDEN.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
+                .hint("User lacks administrative privileges (ROLE_ADMIN required).")
                 .build();
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(errorResponse);
     }
@@ -106,6 +113,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase())
                 .message("Validation failed for request fields")
                 .path(request.getRequestURI())
+                .hint("Inspect fieldErrors object for specific validation failures.")
                 .fieldErrors(errors)
                 .build();
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
@@ -121,6 +129,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase())
                 .message(ex.getMessage())
                 .path(request.getRequestURI())
+                .hint(DEFAULT_HINT)
                 .build();
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(errorResponse);
     }
@@ -135,6 +144,7 @@ public class GlobalExceptionHandler {
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .message("An unexpected internal error occurred. Please contact support.")
                 .path(request.getRequestURI())
+                .hint(DEFAULT_HINT)
                 .build();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
     }

@@ -1,0 +1,82 @@
+openapi: 3.0.3
+info:
+  title: LinkGuard Platform API
+  description: Enterprise URL shortener API featuring sub-10ms Redis caching, real-time analytics, vector QR codes, password protection, and SHA-256 IP privacy.
+  version: 1.0.0
+  contact:
+    name: LinkGuard Engineering Support
+    email: support@linkguard.app
+    url: https://link-guard-two.vercel.app/developers
+servers:
+  - url: https://linkguard-5a0l.onrender.com
+    description: Production Live Backend API
+  - url: http://localhost:8080
+    description: Local Development API Server
+paths:
+  /{shortCode}:
+    get:
+      summary: Resolve short link redirect
+      description: Resolves a short code slug to its original target destination URL via HTTP 302 Found.
+      parameters:
+        - name: shortCode
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '302':
+          description: HTTP 302 Found redirect to target URL
+        '404':
+          description: Short code not found or expired
+  /api/v1/urls:
+    post:
+      summary: Create short URL
+      description: Shortens a long destination URL into a compact, collision-safe short code.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - originalUrl
+              properties:
+                originalUrl:
+                  type: string
+                  example: https://github.com/AniketK100/LinkGuard
+                customSlug:
+                  type: string
+                  example: my-custom-link
+                password:
+                  type: string
+                  example: SecretPass123!
+      responses:
+        '200':
+          description: Short URL successfully created
+    get:
+      summary: List user URLs
+      security:
+        - BearerAuth: []
+      responses:
+        '200':
+          description: List of user short URLs
+  /api/v1/analytics/{urlId}:
+    get:
+      summary: Get URL analytics
+      security:
+        - BearerAuth: []
+      parameters:
+        - name: urlId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: URL analytics telemetry response
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

@@ -3,42 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" />
+    <link rel="preload" href="/logo.svg" as="image" type="image/svg+xml" fetchpriority="high" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="LinkGuard is a fast URL shortener. Create custom links, vector QR codes, and track real-time click analytics." />
-    <meta name="keywords" content="URL shortener, short link analytics, custom QR code generator, password protected links, privacy link protection, Base62 link shortener" />
+    <meta name="description" content="LinkGuard is an enterprise-grade URL shortener with sub-10ms memory caching, real-time click analytics, custom vector QR code generator, password protection, and privacy link management." />
+    <meta name="keywords" content="URL Shortener, Short Link Analytics, Dynamic Vector QR Code Generator, Password Protected Links, Privacy Protection, Link Management Platform, Custom Slugs, Base62 Encoding, Fast URL Redirect" />
     <meta name="author" content="LinkGuard Engineering Team" />
     <meta name="theme-color" content="#08090B" />
-    <link rel="canonical" href="https://link-guard-blond.vercel.app/" />
+    
+    <!-- Hreflang Language & Region Tags -->
+    <link rel="canonical" href="https://link-guard-two.vercel.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://link-guard-two.vercel.app/" />
+    <link rel="alternate" hreflang="en" href="https://link-guard-two.vercel.app/" />
 
-    <!-- Open Graph Metadata (Configured for Vercel Deployment) -->
+    <!-- Open Graph Metadata (Modern WebP Format & High Performance) -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="LinkGuard Platform" />
-    <meta property="og:title" content="LinkGuard — Fast & Secure URL Shortener" />
-    <meta property="og:description" content="LinkGuard is a fast URL shortener. Create custom links, vector QR codes, and track real-time click analytics." />
-    <meta property="og:url" content="https://link-guard-blond.vercel.app/" />
-    <meta property="og:image" content="https://link-guard-blond.vercel.app/og-image.png" />
-    <meta property="og:image:secure_url" content="https://link-guard-blond.vercel.app/og-image.png" />
-    <meta property="og:image:type" content="image/png" />
+    <meta property="og:title" content="LinkGuard — Fast URL Shortener with Real-Time Analytics" />
+    <meta property="og:description" content="Enterprise URL shortener featuring sub-10ms Redis caching, real-time analytics, vector QR codes, and privacy protection." />
+    <meta property="og:url" content="https://link-guard-two.vercel.app/" />
+    <meta property="og:image" content="https://link-guard-two.vercel.app/og-image.webp" />
+    <meta property="og:image:secure_url" content="https://link-guard-two.vercel.app/og-image.webp" />
+    <meta property="og:image:type" content="image/webp" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="LinkGuard Control Room Platform" />
+    <meta property="og:image:alt" content="LinkGuard Control Room Platform Screenshot" />
 
     <!-- Twitter Card Metadata -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="LinkGuard — Fast & Secure URL Shortener" />
-    <meta name="twitter:description" content="LinkGuard is a fast URL shortener. Create custom links, vector QR codes, and track real-time click analytics." />
-    <meta name="twitter:image" content="https://link-guard-blond.vercel.app/og-image.png" />
+    <meta name="twitter:title" content="LinkGuard — Fast URL Shortener with Real-Time Analytics" />
+    <meta name="twitter:description" content="Enterprise URL shortener featuring sub-10ms Redis caching, real-time analytics, vector QR codes, and privacy protection." />
+    <meta name="twitter:image" content="https://link-guard-two.vercel.app/og-image.webp" />
     <meta name="twitter:creator" content="@LinkGuardApp" />
 
-    <!-- Dynamic Origin Auto-Updater for Local & Alternative Domains -->
+    <!-- Dynamic Origin Auto-Updater for Local & Custom Domains -->
     <script>
       (function() {
         try {
           var origin = window.location.origin;
-          if (origin && !origin.includes('link-guard-blond.vercel.app')) {
-            var fullImgUrl = origin + '/og-image.png';
+          if (origin && !origin.includes('link-guard-two.vercel.app')) {
+            var fullImgUrl = origin + '/og-image.webp';
             var ogImg = document.querySelector('meta[property="og:image"]');
             var ogImgSec = document.querySelector('meta[property="og:image:secure_url"]');
             var twImg = document.querySelector('meta[name="twitter:image"]');
@@ -53,36 +57,36 @@
       })();
     </script>
 
-    <!-- Google Fonts -->
+    <!-- Preconnect & Preload Google Fonts for LCP Performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
 
-    <!-- Structured Data -->
+    <!-- Structured Data (JSON-LD Schema) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
       "@graph": [
         {
           "@type": "Organization",
-          "@id": "https://link-guard-blond.vercel.app/#organization",
+          "@id": "https://link-guard-two.vercel.app/#organization",
           "name": "LinkGuard Platform Inc.",
-          "url": "https://link-guard-blond.vercel.app",
-          "logo": "https://link-guard-blond.vercel.app/logo.svg"
+          "url": "https://link-guard-two.vercel.app",
+          "logo": "https://link-guard-two.vercel.app/logo.svg"
         },
         {
           "@type": "WebApplication",
-          "@id": "https://link-guard-blond.vercel.app/#webapp",
+          "@id": "https://link-guard-two.vercel.app/#webapp",
           "name": "LinkGuard URL Shortener",
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "All",
           "description": "Privacy-first URL shortener featuring sub-10ms memory caching, password protection, and vector QR codes.",
-          "url": "https://link-guard-blond.vercel.app"
+          "url": "https://link-guard-two.vercel.app"
         }
       ]
     }
     </script>
-    <title>LinkGuard — Fast & Secure URL Shortener</title>
+    <title>LinkGuard — Fast URL Shortener with Real-Time Analytics</title>
   </head>
   <body class="bg-canvas text-text-primary antialiased min-h-screen font-sans">
     <div id="root"></div>
@@ -97,9 +101,28 @@
         </nav>
       </header>
       <main role="main" style="max-width:900px;margin:0 auto;padding:48px 24px;background:#08090B;color:#FFFFFF;">
-        <h1 style="font-size:48px;font-weight:800;line-height:1.1;margin-bottom:16px;">Control room for your links</h1>
-        <p style="font-size:18px;color:#94A3B8;margin-bottom:32px;">Fast, reliable URL shortening with real-time analytics, privacy protection, and customizable QR codes.</p>
+        <article>
+          <h1 style="font-size:48px;font-weight:800;line-height:1.1;margin-bottom:16px;">Control room for your links</h1>
+          <p style="font-size:18px;color:#94A3B8;margin-bottom:32px;">Fast, reliable URL shortening with real-time analytics, privacy protection, and customizable QR codes.</p>
+          <section style="margin-top:32px;display:grid;grid-template-columns:repeat(2,1fr);gap:24px;">
+            <div>
+              <h2 style="font-size:20px;font-weight:700;">Sub-10ms Redirect Speed</h2>
+              <p style="color:#94A3B8;font-size:14px;">Powered by Redis in-memory cache architecture for lightning fast link resolution.</p>
+            </div>
+            <div>
+              <h2 style="font-size:20px;font-weight:700;">SHA-256 Privacy Protection</h2>
+              <p style="color:#94A3B8;font-size:14px;">Automatic daily salted IP hashing protects visitor privacy with zero raw IP storage.</p>
+            </div>
+          </section>
+        </article>
       </main>
+      <aside role="complementary" style="max-width:900px;margin:0 auto;padding:24px;background:#0F172A;border-radius:12px;color:#94A3B8;font-size:14px;">
+        <h3 style="color:#FFFFFF;font-weight:700;margin-bottom:8px;">Enterprise Feature Highlights</h3>
+        <p>Custom alias slugs, vector QR code generator, expiration bounds, and detailed geographic click analytics.</p>
+      </aside>
+      <footer role="contentinfo" style="max-width:900px;margin:32px auto 0;padding:24px;border-top:1px solid #1E293B;color:#64748B;font-size:12px;text-align:center;">
+        &copy; 2026 LinkGuard Platform Inc. All rights reserved. Privacy-first URL shortening and link management.
+      </footer>
     </noscript>
     <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
     <script type="module" src="/src/main.jsx"></script>

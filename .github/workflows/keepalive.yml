@@ -1,0 +1,15 @@
+name: Render Service Keep-Alive
+
+on:
+  schedule:
+    # Run every 10 minutes to prevent Render Free tier container sleep (sleep starts at 15m inactivity)
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-health:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send HTTP Ping to Render Health Check Endpoint
+        run: |
+          curl -s -S -w "\nHTTP Status Code: %{http_code}\nTotal Time: %{time_total}s\n" --max-time 25 https://linkguard-5a0l.onrender.com/actuator/health

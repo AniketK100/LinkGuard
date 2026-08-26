@@ -148,14 +148,21 @@ public class RedirectServiceImpl implements RedirectService {
         try {
             String clientIp = extractClientIp(request);
             String userAgent = request.getHeader("User-Agent");
+            String secChUa = request.getHeader("Sec-CH-UA");
+            if (secChUa == null || secChUa.isBlank()) {
+                secChUa = request.getHeader("Sec-CH-UA-Full-Version-List");
+            }
             String referrer = request.getHeader("Referer");
+            String country = extractCountryHeader(request);
 
             ClickEvent clickEvent = ClickEvent.builder()
                     .urlId(dto.getUrlId())
                     .shortCode(dto.getShortCode())
                     .rawUserAgent(userAgent != null ? userAgent : "Unknown")
+                    .secChUa(secChUa)
                     .referrer(referrer)
                     .ipAddress(clientIp != null ? clientIp : "127.0.0.1")
+                    .country(country)
                     .timestamp(Instant.now())
                     .build();
 
@@ -163,6 +170,21 @@ public class RedirectServiceImpl implements RedirectService {
         } catch (Exception ex) {
             log.error("Failed to publish analytics click event for urlId {}: ", dto.getUrlId(), ex);
         }
+    }
+
+    private String extractCountryHeader(HttpServletRequest request) {
+        if (request == null) return null;
+        String[] headers = {
+            "CF-IPCountry", "X-Country-Code", "X-Geo-Country",
+            "CloudFront-Viewer-Country", "X-AppEngine-Country"
+        };
+        for (String h : headers) {
+            String val = request.getHeader(h);
+            if (val != null && !val.isBlank() && !val.equalsIgnoreCase("XX") && !val.equalsIgnoreCase("T1")) {
+                return val.trim().toUpperCase();
+            }
+        }
+        return null;
     }
 
     private String extractClientIp(HttpServletRequest request) {
