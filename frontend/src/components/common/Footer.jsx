@@ -22,11 +22,11 @@ export function Footer() {
         {/* Links Columns */}
         {[
           { title: 'NAVIGATION', links: [['Home','/'],['Features','/features'],['Pricing','/pricing'],['About Us','/about']] },
-          { title: 'DEVELOPERS', links: [['Developer Portal','/developers'],['API Docs','/docs'],['OpenAPI Spec','/openapi.json'],['LLM Instructions','/llms.txt']] },
+          { title: 'DEVELOPERS', links: [['API Documentation','/docs'],['LLM Instructions','/llms.txt']] },
           { title: 'SUPPORT & LEGAL', links: [['Contact Us','/contact'],['Privacy Policy','/privacy'],['Terms Policy','/terms']] },
         ].map((section) => (
           <div key={section.title} className="space-y-3 sm:space-y-4">
-            <h4 className="text-text-primary font-extrabold text-[11px] sm:text-xs uppercase tracking-widest">{section.title}</h4>
+            <div className="text-text-primary font-extrabold text-[11px] sm:text-xs uppercase tracking-widest" role="heading" aria-level={3}>{section.title}</div>
             <ul className="space-y-2.5 sm:space-y-3 text-xs sm:text-sm font-medium">
               {section.links.map(([label, path]) => (
                 <li key={label}>

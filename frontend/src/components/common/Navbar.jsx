@@ -74,7 +74,7 @@ export function Navbar() {
           <div className="flex items-center gap-3 sm:gap-6">
             {isMarketing && (
               <div className="hidden md:flex items-center gap-6 text-xs font-extrabold uppercase tracking-widest text-text-primary">
-                {[['Features','/features'],['Pricing','/pricing'],['About','/about'],['API & Devs','/developers'],['Contact','/contact']].map(([label, path]) => (
+                {[['Features','/features'],['Pricing','/pricing'],['About','/about'],['Contact','/contact']].map(([label, path]) => (
                   <Link key={path} to={path} className={`hover:opacity-75 transition-opacity duration-100 ${location.pathname === path ? 'border-b-2 border-text-primary pb-0.5' : ''}`}>
                     {label}
                   </Link>

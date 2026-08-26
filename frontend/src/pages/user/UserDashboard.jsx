@@ -5,6 +5,7 @@ import Button from '../../components/common/Button';
 import Badge from '../../components/common/Badge';
 import Modal from '../../components/common/Modal';
 import api from '../../lib/axios';
+import { trackEvent } from '../../lib/posthog';
 
 export function UserDashboard() {
   const [urls, setUrls] = useState([]);
@@ -16,7 +17,10 @@ export function UserDashboard() {
   const [copiedId, setCopiedId] = useState(null);
   const [validationError, setValidationError] = useState('');
 
-  useEffect(() => { fetchUrls(); }, []);
+  useEffect(() => {
+    fetchUrls();
+    trackEvent('dashboard_viewed');
+  }, []);
 
   const fetchUrls = () => {
     setLoading(true);
@@ -36,6 +40,19 @@ export function UserDashboard() {
         originalUrl: originalUrl.trim(),
         customAlias: customAlias.trim() || undefined,
       });
+
+      let targetDomain = '';
+      try {
+        targetDomain = new URL(originalUrl.trim()).hostname;
+      } catch (ignored) {}
+
+      trackEvent('short_url_created', {
+        domain: targetDomain,
+        urlLength: originalUrl.trim().length,
+        isCustomAlias: !!customAlias.trim(),
+        isPasswordProtected: false,
+      });
+
       setOriginalUrl('');
       setCustomAlias('');
       setCreateModalOpen(false);

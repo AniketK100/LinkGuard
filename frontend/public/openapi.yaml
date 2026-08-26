@@ -6,7 +6,7 @@ info:
   contact:
     name: LinkGuard Engineering Support
     email: support@linkguard.app
-    url: https://link-guard-two.vercel.app/developers
+    url: https://link-guard-two.vercel.app/docs
 servers:
   - url: https://linkguard-5a0l.onrender.com
     description: Production Live Backend API

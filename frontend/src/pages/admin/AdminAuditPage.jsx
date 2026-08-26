@@ -12,7 +12,7 @@ export function AdminAuditPage() {
 
   const fetchAuditLogs = () => {
     setLoading(true);
-    api.get('/api/v1/audit/logs')
+    api.get('/api/v1/security/audit')
       .then((res) => {
         if (res.data?.success) {
           const raw = res.data.data;

@@ -47,8 +47,6 @@ curl -X GET https://linkguard-5a0l.onrender.com/api/v1/analytics/101 \
 ```
 
 ## Machine Artifacts & Indexes
-- **OpenAPI 3.0 Spec (JSON)**: [openapi.json](https://link-guard-two.vercel.app/openapi.json)
 - **OpenAPI 3.0 Spec (YAML)**: [openapi.yaml](https://link-guard-two.vercel.app/openapi.yaml)
 - **LLM Index**: [llms.txt](https://link-guard-two.vercel.app/llms.txt)
-- **Developer Portal**: [developers](https://link-guard-two.vercel.app/developers)
 - **Sitemap**: [sitemap.xml](https://link-guard-two.vercel.app/sitemap.xml)

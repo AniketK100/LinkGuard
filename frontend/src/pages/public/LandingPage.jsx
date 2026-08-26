@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Button from '../../components/common/Button';
 import Modal from '../../components/common/Modal';
 import api from '../../lib/axios';
+import { trackEvent } from '../../lib/posthog';
 import { ArrowRight, Copy, Check, Zap, BarChart3, Lock, QrCode, Shield, AlertCircle } from 'lucide-react';
 
 export function LandingPage() {
@@ -26,6 +27,18 @@ export function LandingPage() {
   const handleShorten = async (e) => {
     e.preventDefault();
     if (!url.trim()) return;
+
+    const token = localStorage.getItem('token');
+    const guestCreated = localStorage.getItem('linkguard_guest_url_created');
+
+    // Enforce guest limit: only 1 short URL allowed without an account
+    if (!token && guestCreated === 'true') {
+      const msg = 'Guest limit reached (1 short link max). Please create a free account or log in to shorten unlimited URLs!';
+      setError(msg);
+      setValidationModal(msg);
+      return;
+    }
+
     setLoading(true);
     setError('');
     setValidationModal('');
@@ -34,6 +47,21 @@ export function LandingPage() {
       if (response.data?.success) {
         const backendBase = import.meta.env.VITE_API_BASE_URL || window.location.origin;
         setShortUrl(backendBase + '/' + response.data.data.shortCode);
+        if (!token) {
+          localStorage.setItem('linkguard_guest_url_created', 'true');
+        }
+
+        let targetDomain = '';
+        try {
+          targetDomain = new URL(url.trim()).hostname;
+        } catch (ignored) {}
+
+        trackEvent('short_url_created', {
+          domain: targetDomain,
+          urlLength: url.trim().length,
+          isCustomAlias: false,
+          isPasswordProtected: false,
+        });
       }
     } catch (err) {
       const msg = err.response?.data?.message || 'Validation failed for request fields';
@@ -63,13 +91,13 @@ export function LandingPage() {
       <div className="min-h-[calc(100vh-5rem)] flex flex-col justify-between">
         {/* Centered Hero Section */}
         <section className="flex-1 flex flex-col justify-center items-center max-w-5xl mx-auto px-4 py-8 text-center space-y-8 w-full">
-          <h1 id="main-heading" className="font-display text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.08]">
-            Control room for<br />
-            <span className="text-text-primary underline decoration-2 underline-offset-8">your links</span>
+          <h1 id="main-heading" className="font-display text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-[1.1]">
+            Enterprise URL Shortener &amp;<br />
+            <span className="text-text-primary underline decoration-2 underline-offset-8">Analytics Platform</span>
           </h1>
 
-          <p className="text-base sm:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
-            Fast, reliable URL shortening with real-time analytics, privacy protection, and customizable QR codes.
+          <p className="text-base sm:text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
+            Control room for your links: fast, reliable URL shortening with real-time analytics, privacy protection, and customizable QR codes.
           </p>
 
           {/* Live shortener - Pill Input Form */}
@@ -266,21 +294,30 @@ export function LandingPage() {
       </section>
 
       {/* Themed Validation Pop Up Modal */}
-      <Modal isOpen={!!validationModal} onClose={() => setValidationModal('')} title="Validation Failed">
+      <Modal isOpen={!!validationModal} onClose={() => setValidationModal('')} title={validationModal.includes('Guest limit') ? 'Guest Limit Reached' : 'Validation Notice'}>
         <div className="space-y-4">
           <div className="flex items-start gap-3">
-            <div className="p-2 rounded-lg bg-danger/10 border border-danger/20 flex-shrink-0">
-              <AlertCircle className="w-5 h-5 text-danger" />
+            <div className="p-2 rounded-lg bg-warning/10 border border-warning/20 flex-shrink-0">
+              <AlertCircle className="w-5 h-5 text-warning" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-semibold text-text-primary">Validation failed for request fields</p>
+              <p className="text-sm font-semibold text-text-primary">
+                {validationModal.includes('Guest limit') ? 'Guest Limit Reached (1 Max)' : 'Notice'}
+              </p>
               <p className="text-xs text-text-secondary">{validationModal}</p>
             </div>
           </div>
-          <div className="flex justify-end pt-2">
-            <Button onClick={() => setValidationModal('')} variant="primary">
-              OK
-            </Button>
+          <div className="flex justify-end gap-2 pt-2">
+            {validationModal.includes('Guest limit') ? (
+              <>
+                <Link to="/login"><Button variant="secondary" onClick={() => setValidationModal('')}>Log In</Button></Link>
+                <Link to="/register"><Button onClick={() => setValidationModal('')}>Create Free Account</Button></Link>
+              </>
+            ) : (
+              <Button onClick={() => setValidationModal('')} variant="primary">
+                OK
+              </Button>
+            )}
           </div>
         </div>
       </Modal>

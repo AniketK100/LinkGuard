@@ -3,6 +3,7 @@ import { Link, useNavigate, Navigate } from 'react-router-dom';
 import { Shield, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
+import { trackEvent } from '../../lib/posthog';
 
 export function LoginPage() {
   const { user, login, isAdmin } = useAuth();
@@ -23,6 +24,7 @@ export function LoginPage() {
     setError('');
     try {
       const user = await login(email, password);
+      trackEvent('user_logged_in', { user_role: user?.role || 'USER' });
       navigate(user?.role === 'ADMIN' ? '/admin/dashboard' : '/dashboard');
     } catch (err) {
       setError(err.message || 'Invalid credentials.');

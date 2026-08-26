@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BarChart3, Globe, Smartphone, Monitor, Compass } from 'lucide-react';
 import StatCard from '../../components/common/StatCard';
 import api from '../../lib/axios';
+import { trackEvent } from '../../lib/posthog';
 
 export function AnalyticsPage() {
   const [urls, setUrls] = useState([]);
@@ -10,6 +11,7 @@ export function AnalyticsPage() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    trackEvent('analytics_viewed');
     api.get('/api/v1/urls').then((res) => {
       if (res.data?.success) {
         const list = res.data.data.content || [];

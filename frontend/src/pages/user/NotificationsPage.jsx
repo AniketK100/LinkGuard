@@ -30,7 +30,7 @@ export function NotificationsPage() {
               </div>
               <div className="flex-1 space-y-0.5">
                 <div className="flex justify-between items-baseline">
-                  <h4 className="text-xs font-bold text-text-primary">{n.title}</h4>
+                  <h3 className="text-xs font-bold text-text-primary">{n.title}</h3>
                   <span className="text-[10px] font-mono text-text-tertiary">{n.time}</span>
                 </div>
                 <p className="text-xs text-text-secondary">{n.msg}</p>

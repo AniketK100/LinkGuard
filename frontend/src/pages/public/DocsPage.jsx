@@ -65,12 +65,6 @@ export function DocsPage() {
           </div>
         </section>
       </div>
-
-      <div className="pt-4 flex justify-center">
-        <Link to="/developers">
-          <Button icon={ArrowRight}>Visit Developer Portal (/developers)</Button>
-        </Link>
-      </div>
     </div>
   );
 }

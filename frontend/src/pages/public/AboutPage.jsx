@@ -72,7 +72,7 @@ export function AboutPage() {
       <div className="text-center space-y-4 pt-4">
         <h3 className="text-lg font-bold text-text-primary">Explore LinkGuard Developer & Platform Resources</h3>
         <div className="flex flex-wrap justify-center gap-3">
-          <Link to="/developers"><Button icon={Code2}>Developer Portal</Button></Link>
+          <Link to="/docs"><Button icon={Code2}>API Documentation</Button></Link>
           <Link to="/contact"><Button variant="secondary">Contact Support</Button></Link>
         </div>
       </div>

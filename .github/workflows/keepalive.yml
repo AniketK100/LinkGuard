@@ -12,4 +12,24 @@ jobs:
     steps:
       - name: Send HTTP Ping to Render Health Check Endpoint
         run: |
-          curl -s -S -w "\nHTTP Status Code: %{http_code}\nTotal Time: %{time_total}s\n" --max-time 25 https://linkguard-5a0l.onrender.com/actuator/health
+          echo "Pinging Render backend health endpoint..."
+          set +e
+          RESPONSE=$(curl -s -S -w "\n%{http_code}" --max-time 150 --retry 2 --retry-delay 5 --retry-connrefused https://linkguard-5a0l.onrender.com/actuator/health)
+          CURL_EXIT=$?
+          set -e
+
+          if [ $CURL_EXIT -ne 0 ]; then
+            echo "::error::curl network or timeout error (exit code $CURL_EXIT)"
+            exit $CURL_EXIT
+          fi
+
+          HTTP_BODY=$(echo "$RESPONSE" | head -n -1)
+          HTTP_STATUS=$(echo "$RESPONSE" | tail -n 1 | tr -d '\r\n ')
+
+          echo "Response Body: $HTTP_BODY"
+          echo "HTTP Status Code: $HTTP_STATUS"
+
+          if [ "$HTTP_STATUS" != "200" ]; then
+            echo "::error::Keepalive ping failed with HTTP Status Code $HTTP_STATUS"
+            exit 1
+          fi

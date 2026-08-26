@@ -3,6 +3,7 @@ import { Link, Navigate } from 'react-router-dom';
 import { Shield, ArrowRight, Eye, EyeOff } from 'lucide-react';
 import Button from '../../components/common/Button';
 import { useAuth } from '../../context/AuthContext';
+import { trackEvent } from '../../lib/posthog';
 
 export function RegisterPage() {
   const { user, register, isAdmin } = useAuth();
@@ -24,6 +25,7 @@ export function RegisterPage() {
     setError('');
     try {
       await register(name, email, password);
+      trackEvent('user_registered');
       setSuccess(true);
     } catch (err) {
       setError(err.message || 'Registration failed.');

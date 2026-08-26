@@ -3,6 +3,7 @@ import { Download, Palette, RefreshCw, Check, Copy } from 'lucide-react';
 import QRCode from 'qrcode';
 import Button from '../../components/common/Button';
 import api from '../../lib/axios';
+import { trackEvent } from '../../lib/posthog';
 
 export function QrCodePage() {
   const [urls, setUrls] = useState([]);
@@ -78,6 +79,7 @@ export function QrCodePage() {
         a.click();
         document.body.removeChild(a);
       }
+      trackEvent('qr_code_downloaded', { format: format.toLowerCase() });
     } catch {
       alert('Failed to download QR code');
     } finally {

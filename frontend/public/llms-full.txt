@@ -1,0 +1,68 @@
+# LinkGuard Platform — Complete AI Agent & System Documentation
+
+> LinkGuard Platform is an enterprise-grade URL shortener, link management platform, and analytics engine built with Spring Boot 3.4, Java 21, Redis 8, PostgreSQL, and React.
+
+## System Overview & Architecture
+LinkGuard provides sub-10ms URL redirection using a Redis in-memory Cache-Aside pattern. All incoming visitor IP addresses pass through daily salted SHA-256 cryptographic hashing before storage to guarantee GDPR visitor privacy compliance.
+
+### Core Capabilities
+1. **Collision-Safe Base62 Shortening**: Converts long destination URLs into compact 6-8 character short codes or custom branded alias slugs.
+2. **Dynamic Vector QR Code Studio**: Generates downloadable SVG and PNG QR codes with customizable color palettes.
+3. **Real-Time Click Telemetry**: Tracks visitor click counts, unique visitors, geographic country distribution, operating system, browser family, and HTTP referrers.
+4. **Password-Protected Links**: Supports optional BCrypt password protection for sensitive or restricted links.
+5. **Role-Based Access Control (RBAC)**: Supports USER and ADMIN roles with JWT authentication and audit log telemetry.
+
+## Machine Specifications & Specifications
+- [OpenAPI YAML Specification](https://link-guard-two.vercel.app/openapi.yaml): Complete OpenAPI 3.0.3 machine-readable API spec in YAML format.
+- [Agent Instructions Guide](https://link-guard-two.vercel.app/agent-instructions.md): Step-by-step API execution instructions and cURL request patterns for AI agents.
+- [API Documentation](https://link-guard-two.vercel.app/docs): Comprehensive REST API endpoint reference and authentication guides.
+- [Sitemap Index](https://link-guard-two.vercel.app/sitemap.xml): XML sitemap index of all discoverable platform routes.
+
+## Complete REST API Reference
+
+### 1. Create Short URL
+- **Endpoint**: `POST https://linkguard-5a0l.onrender.com/api/v1/urls`
+- **Headers**: `Content-Type: application/json`
+- **Request Body**:
+```json
+{
+  "originalUrl": "https://github.com/AniketK100/LinkGuard",
+  "customSlug": "linkguard-repo",
+  "password": "OptionalPassword123!"
+}
+```
+- **Response (200 OK)**:
+```json
+{
+  "success": true,
+  "message": "URL shortened successfully",
+  "data": {
+    "id": 101,
+    "shortCode": "linkguard-repo",
+    "shortUrl": "https://link-guard-two.vercel.app/linkguard-repo",
+    "originalUrl": "https://github.com/AniketK100/LinkGuard",
+    "clickCount": 0,
+    "createdAt": "2026-08-26T23:50:00Z"
+  }
+}
+```
+
+### 2. Resolve Short Link Redirect
+- **Endpoint**: `GET https://link-guard-two.vercel.app/{shortCode}`
+- **Response**: `HTTP 302 Found` with `Location: <ORIGINAL_URL>` header.
+
+### 3. User Authentication (Login)
+- **Endpoint**: `POST https://linkguard-5a0l.onrender.com/api/v1/auth/login`
+- **Request Body**: `{"email": "admin@linkguard.app", "password": "AdminPassword123!"}`
+- **Response**: JWT Access Token object.
+
+### 4. Fetch Click Telemetry Analytics
+- **Endpoint**: `GET https://linkguard-5a0l.onrender.com/api/v1/analytics/{urlId}`
+- **Headers**: `Authorization: Bearer <JWT_ACCESS_TOKEN>`
+- **Response**: Granular click statistics, country breakdown, and device distributions.
+
+## Error Codes & Resolution Guidance
+- `400 BAD_REQUEST`: Invalid URL format or duplicate custom slug.
+- `401 UNAUTHORIZED`: Invalid or missing Bearer token.
+- `404 NOT_FOUND`: Resource path or short link does not exist.
+- `429 TOO_MANY_REQUESTS`: Rate limit exceeded. Retry after 60s window.

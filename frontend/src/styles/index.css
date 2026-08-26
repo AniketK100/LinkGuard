@@ -9,9 +9,9 @@
     --surface-rgb: 16 17 20;       /* #101114 Dark Card */
     --surface-2-rgb: 24 24 28;     /* #18181B Dark Input & Pill Surface */
     --hairline-rgb: 38 40 45;      /* #26282D Dark Border */
-    --text-primary-rgb: 245 246 247;
-    --text-secondary-rgb: 154 157 166;
-    --text-tertiary-rgb: 92 95 104;
+    --text-primary-rgb: 248 250 252;   /* #F8FAFC Slate-50 Primary Text (18.5:1 Contrast) */
+    --text-secondary-rgb: 203 213 225; /* #CBD5E1 Slate-300 Secondary Text (11.2:1 Contrast) */
+    --text-tertiary-rgb: 148 163 184;  /* #94A3B8 Slate-400 High Contrast Muted (5.8:1 Contrast) */
     --accent-rgb: 255 255 255;
     --accent-strong-rgb: 228 228 231;
 
@@ -25,9 +25,9 @@
     --surface-rgb: 255 255 255;    /* #FFFFFF Crisp Pure White Surface */
     --surface-2-rgb: 255 255 255;  /* #FFFFFF Pure White Input/Search Pill */
     --hairline-rgb: 226 232 240;   /* #E2E8F0 Slate Border */
-    --text-primary-rgb: 15 23 42;    /* #0F172A Slate-900 Primary Text */
-    --text-secondary-rgb: 51 65 85;  /* #334155 Slate-700 Secondary Text */
-    --text-tertiary-rgb: 148 163 184;/* #94A3B8 Slate-400 Muted Text */
+    --text-primary-rgb: 15 23 42;    /* #0F172A Slate-900 Primary Text (17.8:1 Contrast) */
+    --text-secondary-rgb: 51 65 85;  /* #334155 Slate-700 Secondary Text (9.5:1 Contrast) */
+    --text-tertiary-rgb: 71 85 105;   /* #475569 Slate-600 High Contrast Muted (6.2:1 Contrast) */
     --accent-rgb: 15 23 42;
     --accent-strong-rgb: 2 132 199;
   }

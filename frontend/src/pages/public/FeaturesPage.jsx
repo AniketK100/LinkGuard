@@ -1,42 +1,63 @@
 import React from 'react';
-import { Globe, QrCode, Lock, RefreshCw, Shield, Cpu, BarChart3, Zap } from 'lucide-react';
+import { Globe, QrCode, Lock, RefreshCw, Shield, Cpu, BarChart3, Zap, CheckCircle2 } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import Button from '../../components/common/Button';
 
 const features = [
-  { title: 'Custom Short Links', desc: 'Create custom slugs and branded short links that are easy to remember and share.', icon: Globe },
-  { title: 'QR Code Studio', desc: 'Create and download custom QR codes in PNG or SVG formats with your choice of colors.', icon: QrCode },
-  { title: 'Password Protection', desc: 'Secure any destination link with a password so only authorized visitors can open it.', icon: Lock },
-  { title: 'Link Expiration', desc: 'Set links to automatically expire or deactivate after a specific date or time.', icon: RefreshCw },
-  { title: 'Privacy Protection', desc: 'All visitor IP addresses are fully anonymized. We never store or log personal data.', icon: Shield },
-  { title: 'Instant Speed', desc: 'High-speed redirection engine ensuring sub-100ms load times for all visitors.', icon: Cpu },
-  { title: 'Click Analytics', desc: 'View detailed insights by country, device, browser, and referring websites.', icon: BarChart3 },
-  { title: 'Spam Protection', desc: 'Automatic rate limiting prevents spam attacks and keeps your links safe.', icon: Zap },
+  { title: 'Custom Short Links', desc: 'Create custom slugs and branded short links that are memorable, easy to share, and simple to embed in marketing campaigns.', icon: Globe },
+  { title: 'Dynamic QR Code Studio', desc: 'Generate and download vector SVG or raster PNG QR codes with customizable color themes for print and digital media.', icon: QrCode },
+  { title: 'BCrypt Password Protection', desc: 'Secure any destination link with strong BCrypt password validation so only authorized visitors can access your content.', icon: Lock },
+  { title: 'Scheduled Link Expiration', desc: 'Set links to automatically expire or deactivate after a specific date, time, or total click threshold.', icon: RefreshCw },
+  { title: 'SHA-256 Visitor Privacy', desc: 'All visitor IP addresses are instantly hashed with daily rotating cryptographic salts. Zero raw IP logging for full GDPR compliance.', icon: Shield },
+  { title: 'Sub-10ms Redis Redirection Engine', desc: 'High-speed cache-aside architecture delivers sub-10ms redirection response times worldwide.', icon: Cpu },
+  { title: 'Real-Time Click Telemetry', desc: 'View granular visitor insights including geographic country distribution, device types, browser families, and referrers.', icon: BarChart3 },
+  { title: 'Distributed Rate Limiting & Protection', desc: 'Automatic sliding-window rate limiting prevents bot spam attacks and safeguards infrastructure stability.', icon: Zap },
 ];
 
 export function FeaturesPage() {
   return (
-    <div className="max-w-5xl mx-auto px-4 py-20 space-y-12">
-      <div className="text-center max-w-2xl mx-auto space-y-3">
-        <h1 className="text-4xl font-bold text-text-primary tracking-tight">Platform Features</h1>
-        <p className="text-text-secondary text-sm leading-relaxed">
-          Everything you need to create, track, and protect your links.
+    <div className="max-w-6xl mx-auto px-4 py-16 lg:py-24 space-y-16">
+      {/* Header */}
+      <div className="text-center max-w-3xl mx-auto space-y-4">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-accent text-xs font-mono font-bold">
+          <CheckCircle2 className="w-3.5 h-3.5" /> High-Performance Capabilities
+        </div>
+        <h1 className="text-3xl sm:text-5xl font-display font-extrabold text-text-primary tracking-tight">
+          Enterprise URL Infrastructure Features
+        </h1>
+        <p className="text-text-secondary text-sm sm:text-base leading-relaxed">
+          Discover the complete suite of high-speed URL shortening, vector QR code generation, password protection, and privacy-first analytics tools.
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {/* Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {features.map((feat, idx) => {
           const Icon = feat.icon;
           return (
-            <div key={idx} className="bg-surface border border-hairline rounded-xl p-5 space-y-3 group hover:border-accent/20 transition-colors duration-200">
+            <div key={idx} className="bg-surface border border-hairline rounded-2xl p-6 sm:p-7 space-y-4 group hover:border-accent/30 transition-all duration-200 shadow-sm">
               <div className="flex items-center gap-3">
-                <div className="p-2 rounded-lg bg-accent/5 border border-accent/10 text-accent">
-                  <Icon className="w-4 h-4" strokeWidth={1.75} />
+                <div className="p-3 rounded-xl bg-accent/10 border border-accent/20 text-accent flex-shrink-0">
+                  <Icon className="w-5 h-5" strokeWidth={2} />
                 </div>
-                <h3 className="text-sm font-bold text-text-primary">{feat.title}</h3>
+                <h2 className="text-base sm:text-lg font-bold text-text-primary">{feat.title}</h2>
               </div>
-              <p className="text-[13px] text-text-secondary leading-relaxed">{feat.desc}</p>
+              <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">{feat.desc}</p>
             </div>
           );
         })}
+      </div>
+
+      {/* CTA */}
+      <div className="bg-surface border border-hairline rounded-2xl p-8 text-center space-y-4 max-w-3xl mx-auto shadow-lg">
+        <h2 className="text-xl font-bold text-text-primary">Ready to streamline your links?</h2>
+        <p className="text-xs sm:text-sm text-text-secondary leading-relaxed">
+          Start creating secure, high-speed short links with real-time telemetry today.
+        </p>
+        <div className="pt-2 flex justify-center gap-3">
+          <Link to="/register"><Button>Get Started Free</Button></Link>
+          <Link to="/docs"><Button variant="secondary">API Documentation</Button></Link>
+        </div>
       </div>
     </div>
   );

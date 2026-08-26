@@ -10,15 +10,23 @@ export default defineConfig({
     },
   },
   build: {
+    target: 'es2020',
     sourcemap: false,
+    cssCodeSplit: true,
+    minify: 'esbuild',
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'ui-vendor': ['lucide-react', 'clsx', 'tailwind-merge'],
+          'icons-vendor': ['lucide-react'],
+          'ui-vendor': ['clsx', 'tailwind-merge', 'axios'],
         },
       },
     },
+  },
+  esbuild: {
+    drop: ['console', 'debugger'],
   },
   server: {
     port: 3000,

@@ -23,7 +23,6 @@ export function CommandPalette({ isOpen, onClose }) {
 
   const actions = [
     { label: 'Create new short link', icon: Plus, path: '/', shortcut: 'N' },
-    { label: 'Developer Portal', icon: Code2, path: '/developers' },
     { label: 'API Documentation', icon: Search, path: '/docs' },
     { label: 'Go to Dashboard', icon: Link2, path: '/dashboard' },
     { label: 'View Analytics', icon: BarChart3, path: '/dashboard/analytics' },
